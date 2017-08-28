@@ -11,7 +11,7 @@ import java.util.List;
  * on 2017/8/26 15:41
  */
 
-public abstract class MultiBaseAdapter<T> extends SingleBaseAdapter<T> {
+public abstract class MultiBaseAdapter<T> extends BaseAdapter<T> {
 
     public MultiBaseAdapter(Context context, List<T> items) {
         super(context, items);
@@ -19,24 +19,27 @@ public abstract class MultiBaseAdapter<T> extends SingleBaseAdapter<T> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View holderView = null;
-        if (isOpenLoadMore && viewType == VIEW_TYPE_FOOTER) {
-            holderView = mLayoutInflater.inflate(R.layout.item_footer_load, parent, false);
+        if (isNotFooterItem(viewType)) {
+            View itemView = mLayoutInflater.inflate(getItemLayoutId(viewType), parent, false);
+            return new ViewHolder(itemView);
         } else {
-            holderView = mLayoutInflater.inflate(getItemLayoutId(viewType), parent, false);
+            return super.onCreateViewHolder(parent, viewType);
         }
-        return new ViewHolder(holderView);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (isOpenLoadMore && getItemViewType(position) == VIEW_TYPE_FOOTER) return;
-        convert(holder, mItems.get(position), position, getItemViewType(position));
+        super.onBindViewHolder(holder, position);
+
+        int viewType = holder.getItemViewType();
+        if (isNotFooterItem(viewType)) {
+            convert(holder, mItems.get(position), position, viewType);
+        }
     }
 
     @Override
-    public int getItemViewType(int position) {
-        return getMultiViewType(mItems.get(position), position);
+    public int getViewType(T item, int position) {
+        return getMultiViewType(item, position);
     }
 
     protected abstract void convert(ViewHolder holder, T item, int position, int viewType);

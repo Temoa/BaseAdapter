@@ -1,27 +1,31 @@
 package me.temoa.baseadapter;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import me.temoa.base.adapter.SingleBaseAdapter;
+import me.temoa.base.adapter.MultiBaseAdapter;
+import me.temoa.base.adapter.ViewHolder;
 import me.temoa.base.adapter.listener.OnItemClickListener;
 import me.temoa.base.adapter.listener.OnLoadMoreListener;
-import me.temoa.base.adapter.ViewHolder;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Created by Lai
+ * on 2017/8/28 17:00
+ */
+
+public class MultiItemActivity extends AppCompatActivity {
+
+    private static final int VIEW_TYPE_NORMAL = 1;
+    private static final int VIEW_TYPE_IMAGE = 2;
 
     private final String[] titles = {
             "苍井空老师Twitter正式宣布不再拍摄AV",
@@ -52,33 +56,47 @@ public class MainActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_multi);
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerView);
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.multi_recyclerView);
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        List<String> titleList = new ArrayList<>();
-        Collections.addAll(titleList, titles);
-        final SingleBaseAdapter<String> adapter = new SingleBaseAdapter<String>(this, titleList) {
+        final MultiBaseAdapter<ImageMsgItem> adapter = new MultiBaseAdapter<ImageMsgItem>(this, getData()) {
             @Override
-            protected void convert(ViewHolder holder, String item, int position) {
-                holder.setText(R.id.item_tv, item);
+            protected void convert(ViewHolder holder, ImageMsgItem item, int position, int viewType) {
+                if (viewType == VIEW_TYPE_NORMAL) {
+                    holder.setText(R.id.item_tv, item.getMsg());
+                } else {
+                    holder.setText(R.id.item_has_image_tv, item.getMsg());
+                }
             }
 
             @Override
-            protected int getItemLayoutId() {
-                return R.layout.item;
+            protected int getItemLayoutId(int viewType) {
+                if (viewType == VIEW_TYPE_NORMAL) {
+                    return R.layout.item;
+                } else {
+                    return R.layout.item_has_image;
+                }
+            }
+
+            @Override
+            protected int getMultiViewType(ImageMsgItem item, int position) {
+                if (!item.isHasImage()) {
+                    return VIEW_TYPE_NORMAL;
+                } else {
+                    return VIEW_TYPE_IMAGE;
+                }
             }
         };
-        adapter.setItemClickListener(new OnItemClickListener<String>() {
+        adapter.setItemClickListener(new OnItemClickListener<ImageMsgItem>() {
             @Override
-            public void onClick(View itemView, String item, int position) {
-                Toast.makeText(MainActivity.this, item + position, Toast.LENGTH_SHORT).show();
+            public void onClick(View itemView, ImageMsgItem item, int position) {
+                Toast.makeText(MultiItemActivity.this, item.getMsg() + position, Toast.LENGTH_SHORT).show();
             }
         });
         adapter.openLoadMore(true);
@@ -89,27 +107,62 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         adapter.setLoadCompleted();
-                        List<String> list = new ArrayList<>();
-                        Collections.addAll(list, newTitles);
-                        adapter.addData(list);
+                        adapter.addData(getMoreData());
                     }
-                }, 2000);
+                }, 1000);
             }
         });
         recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
+    private List<ImageMsgItem> getData() {
+        List<ImageMsgItem> list = new ArrayList<>();
+        for (int i = 0; i < titles.length; i++) {
+            ImageMsgItem item = new ImageMsgItem();
+            item.setMsg(titles[i]);
+            if (i > 3 && i < 7) {
+                item.setHasImage(true);
+            } else {
+                item.setHasImage(false);
+            }
+            list.add(item);
+        }
+        return list;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_multi) {
-            startActivity(new Intent(this, MultiItemActivity.class));
+    private List<ImageMsgItem> getMoreData() {
+        List<ImageMsgItem> list = new ArrayList<>();
+        for (int i = 0; i < newTitles.length; i++) {
+            ImageMsgItem item = new ImageMsgItem();
+            item.setMsg(newTitles[i]);
+            if (i == 3 || i == 5) {
+                item.setHasImage(true);
+            } else {
+                item.setHasImage(false);
+            }
+            list.add(item);
         }
-        return super.onOptionsItemSelected(item);
+        return list;
+    }
+
+    private class ImageMsgItem {
+        private String msg;
+        private boolean hasImage;
+
+        String getMsg() {
+            return msg;
+        }
+
+        void setMsg(String msg) {
+            this.msg = msg;
+        }
+
+        boolean isHasImage() {
+            return hasImage;
+        }
+
+        void setHasImage(boolean hasImage) {
+            this.hasImage = hasImage;
+        }
     }
 }

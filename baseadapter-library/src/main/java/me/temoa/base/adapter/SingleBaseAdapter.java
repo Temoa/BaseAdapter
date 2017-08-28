@@ -19,7 +19,7 @@ public abstract class SingleBaseAdapter<T> extends BaseAdapter<T> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType != VIEW_TYPE_FOOTER) {
+        if (isNotFooterItem(viewType)) {
             View itemView = mLayoutInflater.inflate(getItemLayoutId(), parent, false);
             return new ViewHolder(itemView);
         } else {
@@ -31,7 +31,8 @@ public abstract class SingleBaseAdapter<T> extends BaseAdapter<T> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
 
-        if (getItemViewType(position) != VIEW_TYPE_FOOTER)
+        int viewType = holder.getItemViewType();
+        if (isNotFooterItem(viewType))
             convert(holder, mItems.get(position), position);
     }
 

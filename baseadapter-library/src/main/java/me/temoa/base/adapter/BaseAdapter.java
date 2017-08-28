@@ -174,6 +174,10 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
         return -1;
     }
 
+    protected boolean isNotFooterItem(int viewType) {
+        return viewType != VIEW_TYPE_FOOTER;
+    }
+
     public void openLoadMore(boolean isOpenLoadMore) {
         this.isOpenLoadMore = isOpenLoadMore;
     }
