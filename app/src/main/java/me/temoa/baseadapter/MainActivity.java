@@ -17,9 +17,10 @@ import java.util.Collections;
 import java.util.List;
 
 import me.temoa.base.adapter.SingleBaseAdapter;
+import me.temoa.base.adapter.ViewHolder;
+import me.temoa.base.adapter.animation.SlideInBottomAnimation;
 import me.temoa.base.adapter.listener.OnItemClickListener;
 import me.temoa.base.adapter.listener.OnLoadMoreListener;
-import me.temoa.base.adapter.ViewHolder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,20 +49,34 @@ public class MainActivity extends AppCompatActivity {
             "F巨乳写真偶像都丸纱也华写真图集第二弹",
             "「冰上的尤里」第三卷封面公开亚洲三小哥 「点兔」×罗森推出情人节相当商品-日刊和邪晚间版",
             "地域黑群马县-漫画「你还是不懂群马」改编日剧与电影 宫祥太朗主演",
-            "偷走你的心-「初音未来 -Project DIVA- F 2nd」初音未来偷心恶魔.ver手办"
+            "偷走你的心-「初音未来 -Project DIVA- F 2nd」初音未来偷心恶魔.ver手办",
+            "『银魂』『黑色五叶草』『博人传之火影忍者次世代』公布十月动画OPED情报",
+            "欺凌者的救赎之路 被欺者的命运转折-『声之形』观影简评",
+            "一身正气进中央，直言不讳被炮烙—《口水封神》第33集 梅伯篇",
+            "似李！小蜘蛛！ — 图毒生灵第一百六十九弹",
+            "原来是爱COS的朋友-『兽娘动物园』浣熊声优小野早稀早年大尺度COS照流出",
+            "『常住战阵！虫奉行』32卷完结 最终卷10月18日发售",
+            "石原里美 渡边麻友-Weekly Playboy 2017年37期",
+            "『RE：从零开始的异世界生活』新作OVA制作确定"
     };
+
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerView);
-        recyclerView.setHasFixedSize(false);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mRecyclerView = (RecyclerView) findViewById(R.id.main_recyclerView);
+        mRecyclerView.setHasFixedSize(false);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         List<String> titleList = new ArrayList<>();
         Collections.addAll(titleList, titles);
         final SingleBaseAdapter<String> adapter = new SingleBaseAdapter<String>(this, titleList) {
@@ -75,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 return R.layout.item;
             }
         };
+        adapter.openLoadAnimation(new SlideInBottomAnimation());
         adapter.setItemClickListener(new OnItemClickListener<String>() {
             @Override
             public void onClick(View itemView, String item, int position) {
@@ -85,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.setLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                recyclerView.postDelayed(new Runnable() {
+                mRecyclerView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         adapter.setLoadCompleted();
@@ -96,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 }, 2000);
             }
         });
-        recyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(adapter);
     }
 
     @Override

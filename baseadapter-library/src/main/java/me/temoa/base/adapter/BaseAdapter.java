@@ -1,5 +1,6 @@
 package me.temoa.base.adapter;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.temoa.base.adapter.animation.BaseAnimation;
+import me.temoa.base.adapter.animation.ScaleInAnimation;
 import me.temoa.base.adapter.listener.OnItemClickListener;
 import me.temoa.base.adapter.listener.OnItemLongClickListener;
 import me.temoa.base.adapter.listener.OnLoadMoreListener;
@@ -23,8 +26,14 @@ import me.temoa.base.adapter.listener.OnLoadMoreListener;
 
 public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
 
+    // -1默认为加载更多view type
     protected static final int VIEW_TYPE_FOOTER = -1;
 
+    // 是否打开加载动画
+    protected boolean isOpenLoadAnimation = false;
+    protected BaseAnimation mBaseAnimation;
+    protected int mAnimationLastPosition = -1;
+    protected long mAnimationDuration = 300;
     // 是否向下滑动
     protected boolean isScrollDown;
     // 是否加载更多
@@ -41,6 +50,98 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
     protected OnItemLongClickListener<T> mItemLongClickListener;
 
     public abstract int getViewType(T item, int position);
+
+    /**
+     * 打开加载动画
+     */
+    public void openLoadAnimation() {
+        isOpenLoadAnimation = true;
+        mBaseAnimation = new ScaleInAnimation();
+    }
+
+    /**
+     * 打开加载动画
+     *
+     * @param animation BaseAnimation
+     */
+    public void openLoadAnimation(BaseAnimation animation) {
+        isOpenLoadAnimation = true;
+        mBaseAnimation = animation;
+    }
+
+    /**
+     * 设置加载动画的动画时长
+     *
+     * @param l long
+     */
+    public void setAnimationDuration(long l) {
+        mAnimationDuration = l;
+    }
+
+    /**
+     * 加载更多
+     *
+     * @param isOpenLoadMore true or false
+     */
+    public void openLoadMore(boolean isOpenLoadMore) {
+        this.isOpenLoadMore = isOpenLoadMore;
+    }
+
+    /**
+     * 设置加载更多监听器
+     *
+     * @param listener OnLoadMoreListener
+     */
+    public void setLoadMoreListener(OnLoadMoreListener listener) {
+        mLoadMoreListener = listener;
+    }
+
+    /**
+     * 加载更多完成时回调方法
+     */
+    public void setLoadCompleted() {
+        isLoading = false;
+        notifyItemRemoved(getItemCount() - 1);
+    }
+
+    /**
+     * 设置 item 点击事件
+     *
+     * @param listener OnItemClickListener
+     */
+    public void setItemClickListener(OnItemClickListener<T> listener) {
+        mItemClickListener = listener;
+    }
+
+    /**
+     * 设置 item 长按事件
+     *
+     * @param listener OnItemLongClickListener
+     */
+    public void setItemLongClickListener(OnItemLongClickListener<T> listener) {
+        mItemLongClickListener = listener;
+    }
+
+    /**
+     * 设置新数据
+     *
+     * @param newItems 新数据合集
+     */
+    public void setNewData(List<T> newItems) {
+        mItems = newItems;
+        notifyItemRangeChanged(0, newItems.size());
+    }
+
+    /**
+     * 增加数据
+     *
+     * @param items 添加数据合集
+     */
+    public void addData(List<T> items) {
+        int originalSize = mItems.size();
+        mItems.addAll(items);
+        notifyItemRangeInserted(originalSize, items.size());
+    }
 
     public BaseAdapter(Context context, List<T> items) {
         mContext = context;
@@ -62,24 +163,9 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
         if (isOpenLoadMore && getItemViewType(position) == VIEW_TYPE_FOOTER) return;
 
         final int pos = holder.getAdapterPosition();
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mItemClickListener != null) {
-                    mItemClickListener.onClick(view, mItems.get(pos), pos);
-                }
-            }
-        });
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (mItemLongClickListener != null) {
-                    mItemLongClickListener.onLongClick(view, mItems.get(pos), pos);
-                    return true;
-                }
-                return false;
-            }
-        });
+        clickEventSetting(holder.itemView, mItems.get(pos), pos);
+
+        loadAnimationSetting(holder.itemView, pos);
     }
 
     @Override
@@ -145,7 +231,6 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
                             mLoadMoreListener.onLoadMore();
                             isLoading = true;
                         }
-
                     }
                 }
             }
@@ -178,36 +263,34 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
         return viewType != VIEW_TYPE_FOOTER;
     }
 
-    public void openLoadMore(boolean isOpenLoadMore) {
-        this.isOpenLoadMore = isOpenLoadMore;
+    private void clickEventSetting(View v, final T item, final int position) {
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mItemClickListener != null) {
+                    mItemClickListener.onClick(view, item, position);
+                }
+            }
+        });
+
+        v.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (mItemLongClickListener != null) {
+                    mItemLongClickListener.onLongClick(view, item, position);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
-    public void setLoadMoreListener(OnLoadMoreListener listener) {
-        mLoadMoreListener = listener;
-    }
-
-
-    public void setItemClickListener(OnItemClickListener<T> listener) {
-        mItemClickListener = listener;
-    }
-
-    public void setItemLongClickListener(OnItemLongClickListener<T> listener) {
-        mItemLongClickListener = listener;
-    }
-
-    public void setLoadCompleted() {
-        isLoading = false;
-        notifyItemRemoved(getItemCount() - 1);
-    }
-
-    public void setNewData(List<T> newItems) {
-        mItems = newItems;
-        notifyItemRangeChanged(0, newItems.size());
-    }
-
-    public void addData(List<T> items) {
-        int originalSize = mItems.size();
-        mItems.addAll(items);
-        notifyItemRangeInserted(originalSize, items.size());
+    private void loadAnimationSetting(View v, int position) {
+        if (isOpenLoadAnimation && mBaseAnimation != null && position > mAnimationLastPosition) {
+            for (Animator animator : mBaseAnimation.getAnimator(v)) {
+                animator.setDuration(mAnimationDuration);
+                animator.start();
+            }
+        }
     }
 }
