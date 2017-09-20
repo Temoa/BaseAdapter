@@ -13,7 +13,7 @@ import java.util.List;
 
 public abstract class MultiBaseAdapter<T> extends BaseAdapter<T> {
 
-    public MultiBaseAdapter(Context context, List<T> items) {
+    protected MultiBaseAdapter(Context context, List<T> items) {
         super(context, items);
     }
 

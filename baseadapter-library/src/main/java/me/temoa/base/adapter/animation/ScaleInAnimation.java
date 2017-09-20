@@ -2,6 +2,7 @@ package me.temoa.base.adapter.animation;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.view.View;
 
 /**
@@ -23,10 +24,9 @@ public class ScaleInAnimation implements BaseAnimation {
     }
 
     @Override
-    public Animator[] getAnimator(View v) {
-        return new Animator[]{
-                ObjectAnimator.ofFloat(v, View.SCALE_X, from, 1),
-                ObjectAnimator.ofFloat(v, View.SCALE_Y, from, 1)
-        };
+    public Animator getAnimator(View v) {
+        PropertyValuesHolder holder1 = PropertyValuesHolder.ofFloat(View.SCALE_X, from, 1F);
+        PropertyValuesHolder holder2 = PropertyValuesHolder.ofFloat(View.SCALE_Y, from, 1F);
+        return ObjectAnimator.ofPropertyValuesHolder(v, holder1, holder2);
     }
 }

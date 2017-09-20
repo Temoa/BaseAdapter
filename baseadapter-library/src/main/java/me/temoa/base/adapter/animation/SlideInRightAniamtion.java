@@ -12,9 +12,7 @@ import android.view.View;
 public class SlideInRightAniamtion implements BaseAnimation {
 
     @Override
-    public Animator[] getAnimator(View v) {
-        return new Animator[]{
-                ObjectAnimator.ofFloat(v, View.TRANSLATION_X, v.getRootView().getWidth(), 0)
-        };
+    public Animator getAnimator(View v) {
+        return ObjectAnimator.ofFloat(v, View.TRANSLATION_X, v.getRootView().getWidth(), 0);
     }
 }

@@ -18,8 +18,9 @@ import java.util.List;
 
 import me.temoa.base.adapter.SingleBaseAdapter;
 import me.temoa.base.adapter.ViewHolder;
-import me.temoa.base.adapter.animation.SlideInBottomAnimation;
+import me.temoa.base.adapter.animation.ScaleInAnimation;
 import me.temoa.base.adapter.listener.OnItemClickListener;
+import me.temoa.base.adapter.listener.OnItemLongClickListener;
 import me.temoa.base.adapter.listener.OnLoadMoreListener;
 
 public class MainActivity extends AppCompatActivity {
@@ -90,14 +91,20 @@ public class MainActivity extends AppCompatActivity {
                 return R.layout.item;
             }
         };
-        adapter.openLoadAnimation(new SlideInBottomAnimation());
+        adapter.openLoadAnimation(new ScaleInAnimation());
+        adapter.openLoadMore(true);
         adapter.setItemClickListener(new OnItemClickListener<String>() {
             @Override
             public void onClick(View itemView, String item, int position) {
-                Toast.makeText(MainActivity.this, item + position, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, item + " [click]" + position, Toast.LENGTH_SHORT).show();
             }
         });
-        adapter.openLoadMore(true);
+        adapter.setItemLongClickListener(new OnItemLongClickListener<String>() {
+            @Override
+            public void onLongClick(View v, String item, int position) {
+                Toast.makeText(MainActivity.this, item + " [long click]" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
         adapter.setLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
@@ -118,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override

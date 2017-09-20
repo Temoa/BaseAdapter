@@ -13,7 +13,7 @@ import java.util.List;
 
 public abstract class SingleBaseAdapter<T> extends BaseAdapter<T> {
 
-    public SingleBaseAdapter(Context context, List<T> items) {
+    protected SingleBaseAdapter(Context context, List<T> items) {
         super(context, items);
     }
 

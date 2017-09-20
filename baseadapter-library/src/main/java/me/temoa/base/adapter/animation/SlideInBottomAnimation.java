@@ -12,9 +12,7 @@ import android.view.View;
 public class SlideInBottomAnimation implements BaseAnimation {
 
     @Override
-    public Animator[] getAnimator(View v) {
-        return new Animator[]{
-                ObjectAnimator.ofFloat(v, View.TRANSLATION_Y, v.getRootView().getHeight(), 0)
-        };
+    public Animator getAnimator(View v) {
+        return ObjectAnimator.ofFloat(v, View.TRANSLATION_Y, v.getRootView().getHeight(), 0);
     }
 }

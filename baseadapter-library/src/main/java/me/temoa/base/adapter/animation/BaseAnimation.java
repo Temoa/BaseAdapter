@@ -10,5 +10,5 @@ import android.view.View;
 
 public interface BaseAnimation {
 
-    Animator[] getAnimator(View v);
+    Animator getAnimator(View v);
 }
