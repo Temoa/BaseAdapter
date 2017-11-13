@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_multi"
         android:orderInCategory="99"
-        android:title="多种ItemView"
-        app:showAsAction="never"/>
+        android:title="MultiItemView"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_grid"
+        android:orderInCategory="99"
+        android:title="Grid"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_header_footer"
+        android:orderInCategory="99"
+        android:title="Header and footer"
+        app:showAsAction="never" />
 </menu>

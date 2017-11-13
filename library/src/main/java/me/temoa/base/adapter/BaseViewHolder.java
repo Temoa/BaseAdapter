@@ -11,11 +11,11 @@ import android.widget.TextView;
  * Created by Temoa
  * on 2016/8/1 18:28
  */
-public class ViewHolder extends RecyclerView.ViewHolder {
+public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     private SparseArray<View> views;
 
-    ViewHolder(View itemView) {
+    public BaseViewHolder(View itemView) {
         super(itemView);
         views = new SparseArray<>();
     }
@@ -34,55 +34,55 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return (T) view;
     }
 
-    public ViewHolder setText(int viewId, String text) {
+    public BaseViewHolder setText(int viewId, String text) {
         TextView tv = getView(viewId);
         tv.setText(text);
         return this;
     }
 
-    public ViewHolder setTextColor(int viewId, int color) {
+    public BaseViewHolder setTextColor(int viewId, int color) {
         TextView tv = getView(viewId);
         tv.setTextColor(color);
         return this;
     }
 
-    public ViewHolder setImageResource(int viewId, int drawableId) {
+    public BaseViewHolder setImageResource(int viewId, int drawableId) {
         ImageView iv = getView(viewId);
         iv.setImageResource(drawableId);
         return this;
     }
 
-    public ViewHolder setImageBitmap(int viewId, Bitmap bitmap) {
+    public BaseViewHolder setImageBitmap(int viewId, Bitmap bitmap) {
         ImageView iv = getView(viewId);
         iv.setImageBitmap(bitmap);
         return this;
     }
 
-    public ViewHolder setBackroundColor(int viewId, int color) {
+    public BaseViewHolder setBackroundColor(int viewId, int color) {
         View v = getView(viewId);
         v.setBackgroundColor(color);
         return this;
     }
 
-    public ViewHolder setBackgroundResource(int viewId, int drawableId) {
+    public BaseViewHolder setBackgroundResource(int viewId, int drawableId) {
         View v = getView(viewId);
         v.setBackgroundResource(drawableId);
         return this;
     }
 
-    public ViewHolder setVisible(int viewId, boolean visible) {
+    public BaseViewHolder setVisible(int viewId, boolean visible) {
         View view = getView(viewId);
         view.setVisibility(visible ? View.VISIBLE : View.GONE);
         return this;
     }
 
-    public ViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
+    public BaseViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
         View view = getView(viewId);
         view.setOnClickListener(listener);
         return this;
     }
 
-    public ViewHolder setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
+    public BaseViewHolder setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
         View view = getView(viewId);
         view.setOnLongClickListener(listener);
         return this;

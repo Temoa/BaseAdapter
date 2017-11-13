@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BaseAdapter</string>
+    <string name="empty">oh! empty</string>
 </resources>
