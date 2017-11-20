@@ -7,16 +7,14 @@
         android:orderInCategory="99"
         android:title="MultiItemView"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_grid"
-        android:orderInCategory="99"
-        android:title="Grid"
-        app:showAsAction="never" />
-
     <item
         android:id="@+id/action_header_footer"
         android:orderInCategory="99"
         android:title="Header and footer"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_touch"
+        android:orderInCategory="99"
+        android:title="ItemTouchHelper"
         app:showAsAction="never" />
 </menu>

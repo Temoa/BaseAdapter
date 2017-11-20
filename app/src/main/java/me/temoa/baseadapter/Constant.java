@@ -5,8 +5,8 @@ package me.temoa.baseadapter;
  * on 2017/11/11.
  */
 
-class Constant {
-    static final String[] titles = {
+public class Constant {
+    public static final String[] titles = {
             "苍井空老师Twitter正式宣布不再拍摄AV",
             "初音未来代言红米NOTE-世界第一公主助力雷布斯",
             "让美国再次伟大-DID推出第45任美利坚合众国总统唐纳德·特朗普兵人",
@@ -24,7 +24,7 @@ class Constant {
             "「进击的巨人」舞台剧三位主演定妆照公开"
     };
 
-    static final String[] newTitles = {
+    public static final String[] newTitles = {
             "阿宅要个好妹妹-日宅评选“最希望她成为你妹妹”的角色",
             "冷酷无情秉正义，抓尽贪官和污吏-《口水三国》第114集 满宠篇",
             "知名声优徳井青空创作漫画「不要输！！恶之军团！」动画化四月播出",

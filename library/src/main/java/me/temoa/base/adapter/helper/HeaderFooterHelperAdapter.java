@@ -2,8 +2,6 @@ package me.temoa.base.adapter.helper;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,50 +12,50 @@ import me.temoa.base.adapter.BaseViewHolder;
  * on 2017/11/11.
  */
 
-public class HeaderFooterHelper extends RecyclerView.Adapter<BaseViewHolder> {
+public class HeaderFooterHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
-    private View headerView;
-    private View footerView;
+    @NonNull
+    private final RecyclerView.Adapter mInnerAdapter;
+
+    private View mHeaderView;
+    private View mFooterView;
 
     public void addHeader(View v) {
-        headerView = v;
+        mHeaderView = v;
     }
 
     public void addFooter(View v) {
-        footerView = v;
+        mFooterView = v;
     }
 
     public void removeHeader() {
-        headerView = null;
+        mHeaderView = null;
     }
 
     public void removeFooter() {
-        footerView = null;
+        mFooterView = null;
     }
 
     private int getHeaderCount() {
-        return headerView == null ? 0 : 1;
+        return mHeaderView == null ? 0 : 1;
     }
 
     private int getFooterCount() {
-        return footerView == null ? 0 : 1;
+        return mFooterView == null ? 0 : 1;
     }
 
-    @NonNull
-    private final RecyclerView.Adapter innerAdapter;
-
-    public HeaderFooterHelper(@NonNull RecyclerView.Adapter innerAdapter) {
-        this.innerAdapter = innerAdapter;
+    public HeaderFooterHelperAdapter(@NonNull RecyclerView.Adapter innerAdapter) {
+        this.mInnerAdapter = innerAdapter;
     }
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (headerView != null && viewType == Constants.VIEW_TYPE_HEADER) {
-            return new BaseViewHolder(headerView);
-        } else if (footerView != null && viewType == Constants.VIEW_TYPE_FOOTER) {
-            return new BaseViewHolder(footerView);
+        if (mHeaderView != null && viewType == Constants.VIEW_TYPE_HEADER) {
+            return new BaseViewHolder(mHeaderView);
+        } else if (mFooterView != null && viewType == Constants.VIEW_TYPE_FOOTER) {
+            return new BaseViewHolder(mFooterView);
         } else {
-            return (BaseViewHolder) innerAdapter.onCreateViewHolder(parent, viewType);
+            return (BaseViewHolder) mInnerAdapter.onCreateViewHolder(parent, viewType);
         }
     }
 
@@ -66,22 +64,22 @@ public class HeaderFooterHelper extends RecyclerView.Adapter<BaseViewHolder> {
     public void onBindViewHolder(BaseViewHolder holder, int position) {
         if (getItemViewType(position) == Constants.VIEW_TYPE_HEADER) return;
         if (getItemViewType(position) == Constants.VIEW_TYPE_FOOTER) return;
-        innerAdapter.onBindViewHolder(holder, position - getHeaderCount());
+        mInnerAdapter.onBindViewHolder(holder, position - getHeaderCount());
     }
 
     @Override
     public int getItemCount() {
-        return innerAdapter.getItemCount() + getHeaderCount() + getFooterCount();
+        return mInnerAdapter.getItemCount() + getHeaderCount() + getFooterCount();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (headerView != null && position == 0)
+        if (mHeaderView != null && position == 0)
             return Constants.VIEW_TYPE_HEADER;
-        else if (footerView != null && position == getItemCount() - 1)
+        else if (mFooterView != null && position == getItemCount() - 1)
             return Constants.VIEW_TYPE_FOOTER;
         else
-            return innerAdapter.getItemViewType(position - getHeaderCount());
+            return mInnerAdapter.getItemViewType(position - getHeaderCount());
     }
 
     @Override

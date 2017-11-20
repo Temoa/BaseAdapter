@@ -13,33 +13,33 @@ import me.temoa.base.adapter.BaseViewHolder;
  * on 2017/11/11.
  */
 
-public class EmptyHelper extends RecyclerView.Adapter<BaseViewHolder> {
+public class EmptyHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
-    private int emptyViewLayoutId;
+    private int mEmptyViewLayoutId;
 
     @NonNull
-    private final RecyclerView.Adapter innerAdapter;
+    private final RecyclerView.Adapter mInnerAdapter;
 
     public void setEmptyView(int id) {
-        emptyViewLayoutId = id;
+        mEmptyViewLayoutId = id;
     }
 
     private boolean isEmpty() {
-        return innerAdapter.getItemCount() == 0;
+        return mInnerAdapter.getItemCount() == 0;
     }
 
-    public EmptyHelper(@NonNull RecyclerView.Adapter innerAdapter) {
-        this.innerAdapter = innerAdapter;
+    public EmptyHelperAdapter(@NonNull RecyclerView.Adapter mInnerAdapter) {
+        this.mInnerAdapter = mInnerAdapter;
     }
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (isEmpty()) {
-            if (emptyViewLayoutId == 0) throw new RuntimeException("Should set empty view!!");
-            View view = LayoutInflater.from(parent.getContext()).inflate(emptyViewLayoutId, parent, false);
+            if (mEmptyViewLayoutId == 0) throw new RuntimeException("Should set empty view!!");
+            View view = LayoutInflater.from(parent.getContext()).inflate(mEmptyViewLayoutId, parent, false);
             return new BaseViewHolder(view);
         } else {
-            return (BaseViewHolder) innerAdapter.onCreateViewHolder(parent, viewType);
+            return (BaseViewHolder) mInnerAdapter.onCreateViewHolder(parent, viewType);
         }
     }
 
@@ -47,19 +47,19 @@ public class EmptyHelper extends RecyclerView.Adapter<BaseViewHolder> {
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
         if (!isEmpty()) {
-            innerAdapter.onBindViewHolder(holder, position);
+            mInnerAdapter.onBindViewHolder(holder, position);
         }
     }
 
     @Override
     public int getItemCount() {
         if (isEmpty()) return 1;
-        else return innerAdapter.getItemCount();
+        else return mInnerAdapter.getItemCount();
     }
 
     @Override
     public int getItemViewType(int position) {
         if (isEmpty()) return Constants.VIEW_TYPE_EMPTY;
-        else return innerAdapter.getItemViewType(position);
+        else return mInnerAdapter.getItemViewType(position);
     }
 }

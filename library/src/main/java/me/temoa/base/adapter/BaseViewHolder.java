@@ -13,23 +13,23 @@ import android.widget.TextView;
  */
 public class BaseViewHolder extends RecyclerView.ViewHolder {
 
-    private SparseArray<View> views;
+    private SparseArray<View> mViews;
 
     public BaseViewHolder(View itemView) {
         super(itemView);
-        views = new SparseArray<>();
+        mViews = new SparseArray<>();
     }
 
     public SparseArray<View> getAllViews() {
-        return views;
+        return mViews;
     }
 
     @SuppressWarnings("unchecked")
     public <T extends View> T getView(int viewId) {
-        View view = views.get(viewId);
+        View view = mViews.get(viewId);
         if (view == null) {
             view = itemView.findViewById(viewId);
-            views.put(viewId, view);
+            mViews.put(viewId, view);
         }
         return (T) view;
     }

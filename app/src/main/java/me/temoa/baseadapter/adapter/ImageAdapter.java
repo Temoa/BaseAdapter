@@ -6,7 +6,7 @@ import java.util.List;
 
 import me.temoa.base.adapter.BaseViewHolder;
 import me.temoa.base.adapter.MultiBaseAdapter;
-import me.temoa.baseadapter.MultiItemActivity;
+import me.temoa.baseadapter.activity.MultiItemActivity;
 import me.temoa.baseadapter.R;
 
 /**

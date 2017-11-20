@@ -42,6 +42,10 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
 
     /* ------------------------------------------------------------------------------------------ */
 
+    public List<T> getData() {
+        return mItems;
+    }
+
     public void setNewData(List<T> newItems) {
         mItems = newItems;
         notifyItemRangeChanged(0, newItems.size());

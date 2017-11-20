@@ -15,12 +15,12 @@ import me.temoa.base.adapter.listener.OnLoadMoreListener;
  * Created by lai
  * on 2017/11/11.
  */
-public class LoadMoreHelper extends RecyclerView.Adapter<BaseViewHolder> {
+public class LoadMoreHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
-    private RecyclerView.Adapter innerAdapter;
+    private RecyclerView.Adapter mInnerAdapter;
 
-    private int loadViewLayoutId;
-    private View loadView;
+    private int mLoadViewLayoutId;
+    private View mLoadView;
 
     private OnLoadMoreListener mLoadMoreListener;
 
@@ -29,11 +29,11 @@ public class LoadMoreHelper extends RecyclerView.Adapter<BaseViewHolder> {
     private boolean isLoading = false;
 
     public void setLoadView(int id) {
-        this.loadViewLayoutId = id;
+        this.mLoadViewLayoutId = id;
     }
 
     public void setLoadView(View v) {
-        loadView = v;
+        mLoadView = v;
     }
 
     public void openLoadMore() {
@@ -51,23 +51,23 @@ public class LoadMoreHelper extends RecyclerView.Adapter<BaseViewHolder> {
 
     public void setLoadCompleted() {
         isLoading = false;
-        loadView.setVisibility(View.GONE);
+        mLoadView.setVisibility(View.GONE);
     }
 
-    public LoadMoreHelper(RecyclerView.Adapter innerAdapter) {
-        this.innerAdapter = innerAdapter;
+    public LoadMoreHelperAdapter(RecyclerView.Adapter innerAdapter) {
+        this.mInnerAdapter = innerAdapter;
     }
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (isOpenLoadMore && viewType == Constants.VIEW_TYPE_LOAD) {
-            if (loadView == null && loadViewLayoutId == 0)
-                loadView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_load, parent, false);
-            else if (loadView == null)
-                loadView = LayoutInflater.from(parent.getContext()).inflate(loadViewLayoutId, parent, false);
-            return new BaseViewHolder(loadView);
+            if (mLoadView == null && mLoadViewLayoutId == 0)
+                mLoadView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_load, parent, false);
+            else if (mLoadView == null)
+                mLoadView = LayoutInflater.from(parent.getContext()).inflate(mLoadViewLayoutId, parent, false);
+            return new BaseViewHolder(mLoadView);
         } else {
-            return (BaseViewHolder) innerAdapter.onCreateViewHolder(parent, viewType);
+            return (BaseViewHolder) mInnerAdapter.onCreateViewHolder(parent, viewType);
         }
     }
 
@@ -77,12 +77,12 @@ public class LoadMoreHelper extends RecyclerView.Adapter<BaseViewHolder> {
         if (isOpenLoadMore && position == getItemCount() - 1) {
             return;
         }
-        innerAdapter.onBindViewHolder(holder, position);
+        mInnerAdapter.onBindViewHolder(holder, position);
     }
 
     @Override
     public int getItemCount() {
-        int size = innerAdapter.getItemCount();
+        int size = mInnerAdapter.getItemCount();
         return isOpenLoadMore ? (size == 0 ? 0 : size + 1) : size;
     }
 
@@ -91,7 +91,7 @@ public class LoadMoreHelper extends RecyclerView.Adapter<BaseViewHolder> {
         if (isOpenLoadMore && position == getItemCount() - 1) {
             return Constants.VIEW_TYPE_LOAD;
         } else {
-            return innerAdapter.getItemViewType(position);
+            return mInnerAdapter.getItemViewType(position);
         }
     }
 
@@ -122,7 +122,7 @@ public class LoadMoreHelper extends RecyclerView.Adapter<BaseViewHolder> {
                     int lastVisibleItem = findLastVisibleItemPosition(recyclerView.getLayoutManager());
                     if (isOpenLoadMore && isScrollDown && !isLoading && lastVisibleItem + 1 == getItemCount()) {
                         mLoadMoreListener.onLoadMore();
-                        loadView.setVisibility(View.VISIBLE);
+                        mLoadView.setVisibility(View.VISIBLE);
                         isLoading = true;
                     }
                 }

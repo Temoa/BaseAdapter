@@ -1,21 +1,21 @@
-package me.temoa.baseadapter;
+package me.temoa.baseadapter.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import me.temoa.base.adapter.helper.HeaderFooterHelper;
-import me.temoa.base.adapter.helper.LoadMoreHelper;
+import me.temoa.base.adapter.helper.HeaderFooterHelperAdapter;
+import me.temoa.base.adapter.helper.LoadMoreHelperAdapter;
 import me.temoa.base.adapter.listener.OnItemClickListener;
 import me.temoa.base.adapter.listener.OnLoadMoreListener;
+import me.temoa.baseadapter.R;
 import me.temoa.baseadapter.adapter.SimpleStringAdapter;
 
 /**
@@ -28,9 +28,7 @@ public class HeaderFooterActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        final RecyclerView recyclerView = findViewById(R.id.main_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -42,31 +40,30 @@ public class HeaderFooterActivity extends BaseActivity {
                 Toast.makeText(HeaderFooterActivity.this, item, Toast.LENGTH_SHORT).show();
             }
         });
-        final HeaderFooterHelper helper = new HeaderFooterHelper(adapter);
+        final HeaderFooterHelperAdapter headerFooterHelperAdapter = new HeaderFooterHelperAdapter(adapter);
         // 这里遇到一个坑
         // 这里给 Adapter 传入一个 View 用于创建 ViewHolder, 就无法传入 onCreateViewHolder() 的参数 parent
         // 如果item 的布局的根布局是除 RelativeLayout 之外的其他布局或者只有一个view，会导致无法居中的问题
         // 但是如果跟布局是 RelativeLayout 就不会出现这个问题
         View headerView = LayoutInflater.from(this).inflate(R.layout.item_header_footer, null);
-        helper.addHeader(headerView);
+        headerFooterHelperAdapter.addHeader(headerView);
 
-        final LoadMoreHelper loadMoreHelper = new LoadMoreHelper(helper);
-        loadMoreHelper.setLoadMoreListener(new OnLoadMoreListener() {
+        final LoadMoreHelperAdapter loadMoreHelperAdapter = new LoadMoreHelperAdapter(headerFooterHelperAdapter);
+        loadMoreHelperAdapter.setLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 recyclerView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         Toast.makeText(HeaderFooterActivity.this, "load succeed", Toast.LENGTH_SHORT).show();
-                        loadMoreHelper.setLoadCompleted();
-                        loadMoreHelper.closeLoadMore();
+                        loadMoreHelperAdapter.setLoadCompleted();
                     }
                 }, 1000);
             }
         });
 
-        recyclerView.setAdapter(loadMoreHelper);
-        helper.notifyDataSetChanged();
+        recyclerView.setAdapter(loadMoreHelperAdapter);
+        headerFooterHelperAdapter.notifyDataSetChanged();
     }
 
     @Override

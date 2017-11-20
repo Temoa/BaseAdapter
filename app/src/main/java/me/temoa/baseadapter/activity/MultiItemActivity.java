@@ -1,4 +1,4 @@
-package me.temoa.baseadapter;
+package me.temoa.baseadapter.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,12 +12,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.temoa.base.adapter.MultiBaseAdapter;
-import me.temoa.base.adapter.BaseViewHolder;
-import me.temoa.base.adapter.helper.LoadMoreHelper;
 import me.temoa.base.adapter.listener.OnItemClickListener;
 import me.temoa.base.adapter.listener.OnItemLongClickListener;
-import me.temoa.base.adapter.listener.OnLoadMoreListener;
+import me.temoa.baseadapter.Constant;
+import me.temoa.baseadapter.R;
 import me.temoa.baseadapter.adapter.ImageAdapter;
 
 /**
