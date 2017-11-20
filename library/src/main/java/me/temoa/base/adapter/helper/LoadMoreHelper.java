@@ -1,7 +1,5 @@
 package me.temoa.base.adapter.helper;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -17,12 +15,12 @@ import me.temoa.base.adapter.listener.OnLoadMoreListener;
  * Created by lai
  * on 2017/11/11.
  */
-
 public class LoadMoreHelper extends RecyclerView.Adapter<BaseViewHolder> {
 
     private RecyclerView.Adapter innerAdapter;
 
     private int loadViewLayoutId;
+    private View loadView;
 
     private OnLoadMoreListener mLoadMoreListener;
 
@@ -30,8 +28,12 @@ public class LoadMoreHelper extends RecyclerView.Adapter<BaseViewHolder> {
     private boolean isScrollDown;
     private boolean isLoading = false;
 
-    public void setLoadView(@NonNull int id) {
+    public void setLoadView(int id) {
         this.loadViewLayoutId = id;
+    }
+
+    public void setLoadView(View v) {
+        loadView = v;
     }
 
     public void openLoadMore() {
@@ -49,7 +51,7 @@ public class LoadMoreHelper extends RecyclerView.Adapter<BaseViewHolder> {
 
     public void setLoadCompleted() {
         isLoading = false;
-        notifyItemRemoved(getItemCount() - 1);
+        loadView.setVisibility(View.GONE);
     }
 
     public LoadMoreHelper(RecyclerView.Adapter innerAdapter) {
@@ -59,10 +61,9 @@ public class LoadMoreHelper extends RecyclerView.Adapter<BaseViewHolder> {
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (isOpenLoadMore && viewType == Constants.VIEW_TYPE_LOAD) {
-            View loadView;
-            if (loadViewLayoutId == 0)
+            if (loadView == null && loadViewLayoutId == 0)
                 loadView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_load, parent, false);
-            else
+            else if (loadView == null)
                 loadView = LayoutInflater.from(parent.getContext()).inflate(loadViewLayoutId, parent, false);
             return new BaseViewHolder(loadView);
         } else {
@@ -97,8 +98,9 @@ public class LoadMoreHelper extends RecyclerView.Adapter<BaseViewHolder> {
     @Override
     public void onViewAttachedToWindow(BaseViewHolder holder) {
         super.onViewAttachedToWindow(holder);
-        if (isOpenLoadMore)
-            fixStaggeredGridLayoutFullSpanView(holder);
+        if (isOpenLoadMore) {
+            LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_LOAD);
+        }
     }
 
     @Override
@@ -106,31 +108,8 @@ public class LoadMoreHelper extends RecyclerView.Adapter<BaseViewHolder> {
         super.onAttachedToRecyclerView(recyclerView);
         final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (isOpenLoadMore) {
-            fixGridLayoutFullSpanView(layoutManager);
+            LayoutFullSpanUtils.fixGridLayoutFullSpanView(this, layoutManager, Constants.VIEW_TYPE_LOAD);
             setLoadMoreMode(recyclerView);
-        }
-    }
-
-    private void fixStaggeredGridLayoutFullSpanView(BaseViewHolder holder) {
-        if (getItemViewType(holder.getLayoutPosition()) == Constants.VIEW_TYPE_LOAD) {
-            ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
-            if (params != null && params instanceof StaggeredGridLayoutManager.LayoutParams)
-                ((StaggeredGridLayoutManager.LayoutParams) params).setFullSpan(true);
-        }
-    }
-
-    private void fixGridLayoutFullSpanView(RecyclerView.LayoutManager layoutManager) {
-        if (layoutManager instanceof GridLayoutManager) {
-            final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
-            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                @Override
-                public int getSpanSize(int position) {
-                    if (getItemViewType(position) == Constants.VIEW_TYPE_LOAD) {
-                        return gridLayoutManager.getSpanCount();
-                    }
-                    return 1;
-                }
-            });
         }
     }
 
@@ -143,6 +122,7 @@ public class LoadMoreHelper extends RecyclerView.Adapter<BaseViewHolder> {
                     int lastVisibleItem = findLastVisibleItemPosition(recyclerView.getLayoutManager());
                     if (isOpenLoadMore && isScrollDown && !isLoading && lastVisibleItem + 1 == getItemCount()) {
                         mLoadMoreListener.onLoadMore();
+                        loadView.setVisibility(View.VISIBLE);
                         isLoading = true;
                     }
                 }

@@ -1,10 +1,8 @@
 package me.temoa.base.adapter.helper;
 
 import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,44 +18,29 @@ public class HeaderFooterHelper extends RecyclerView.Adapter<BaseViewHolder> {
 
     private View headerView;
     private View footerView;
-    private int headerViewLayoutId;
-    private int footerViewLayoutId;
 
-    private boolean hasHeader;
-    private boolean hasFooter;
-
-    public void setHeaderView(View view) {
-        this.headerView = view;
+    public void addHeader(View v) {
+        headerView = v;
     }
 
-    public void setFooterView(View footerView) {
-        this.footerView = footerView;
+    public void addFooter(View v) {
+        footerView = v;
     }
 
-    public void setHeaderView(int id) {
-        this.headerViewLayoutId = id;
+    public void removeHeader() {
+        headerView = null;
     }
 
-    public void setFooterView(int id) {
-        this.footerViewLayoutId = id;
-    }
-
-    public void setHeader(boolean flag) {
-        hasHeader = flag;
-        notifyDataSetChanged();
-    }
-
-    public void setFooter(boolean flag) {
-        hasFooter = flag;
-        notifyDataSetChanged();
+    public void removeFooter() {
+        footerView = null;
     }
 
     private int getHeaderCount() {
-        return hasHeader ? 1 : 0;
+        return headerView == null ? 0 : 1;
     }
 
     private int getFooterCount() {
-        return hasFooter ? 1 : 0;
+        return footerView == null ? 0 : 1;
     }
 
     @NonNull
@@ -69,15 +52,9 @@ public class HeaderFooterHelper extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (hasHeader && viewType == Constants.VIEW_TYPE_HEADER) {
-            if (headerView == null) {
-                headerView = LayoutInflater.from(parent.getContext()).inflate(headerViewLayoutId, parent, false);
-            }
+        if (headerView != null && viewType == Constants.VIEW_TYPE_HEADER) {
             return new BaseViewHolder(headerView);
-        } else if (hasFooter && viewType == Constants.VIEW_TYPE_FOOTER) {
-            if (footerView == null) {
-                footerView = LayoutInflater.from(parent.getContext()).inflate(footerViewLayoutId, parent, false);
-            }
+        } else if (footerView != null && viewType == Constants.VIEW_TYPE_FOOTER) {
             return new BaseViewHolder(footerView);
         } else {
             return (BaseViewHolder) innerAdapter.onCreateViewHolder(parent, viewType);
@@ -99,46 +76,26 @@ public class HeaderFooterHelper extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        if (hasHeader && position == 0) return Constants.VIEW_TYPE_HEADER;
-        else if (hasFooter && position == getItemCount() - 1) return Constants.VIEW_TYPE_FOOTER;
-        else return innerAdapter.getItemViewType(position - getHeaderCount());
+        if (headerView != null && position == 0)
+            return Constants.VIEW_TYPE_HEADER;
+        else if (footerView != null && position == getItemCount() - 1)
+            return Constants.VIEW_TYPE_FOOTER;
+        else
+            return innerAdapter.getItemViewType(position - getHeaderCount());
     }
 
     @Override
     public void onViewAttachedToWindow(BaseViewHolder holder) {
         super.onViewAttachedToWindow(holder);
-        fixStaggeredGridLayoutFullSpanView(holder);
+        LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_HEADER);
+        LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_FOOTER);
     }
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        fixGridLayoutFullSpanView(layoutManager);
-    }
-
-    private void fixStaggeredGridLayoutFullSpanView(BaseViewHolder holder) {
-        if (getItemViewType(holder.getLayoutPosition()) == Constants.VIEW_TYPE_FOOTER
-                || getItemViewType(holder.getLayoutPosition()) == Constants.VIEW_TYPE_HEADER) {
-            ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
-            if (params != null && params instanceof StaggeredGridLayoutManager.LayoutParams)
-                ((StaggeredGridLayoutManager.LayoutParams) params).setFullSpan(true);
-        }
-    }
-
-    private void fixGridLayoutFullSpanView(RecyclerView.LayoutManager layoutManager) {
-        if (layoutManager instanceof GridLayoutManager) {
-            final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
-            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                @Override
-                public int getSpanSize(int position) {
-                    if (getItemViewType(position) == Constants.VIEW_TYPE_FOOTER
-                            || getItemViewType(position) == Constants.VIEW_TYPE_HEADER) {
-                        return gridLayoutManager.getSpanCount();
-                    }
-                    return 1;
-                }
-            });
-        }
+        LayoutFullSpanUtils.fixGridLayoutFullSpanView(this, layoutManager, Constants.VIEW_TYPE_HEADER);
+        LayoutFullSpanUtils.fixGridLayoutFullSpanView(this, layoutManager, Constants.VIEW_TYPE_FOOTER);
     }
 }

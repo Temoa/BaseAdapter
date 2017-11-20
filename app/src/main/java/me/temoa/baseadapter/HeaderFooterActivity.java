@@ -6,7 +6,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -41,10 +43,12 @@ public class HeaderFooterActivity extends BaseActivity {
             }
         });
         final HeaderFooterHelper helper = new HeaderFooterHelper(adapter);
-        helper.setHeaderView(R.layout.item_header_footer);
-        helper.setHeader(true);
-        helper.setFooterView(R.layout.item_header_footer);
-        helper.setFooter(true);
+        // 这里遇到一个坑
+        // 这里给 Adapter 传入一个 View 用于创建 ViewHolder, 就无法传入 onCreateViewHolder() 的参数 parent
+        // 如果item 的布局的根布局是除 RelativeLayout 之外的其他布局或者只有一个view，会导致无法居中的问题
+        // 但是如果跟布局是 RelativeLayout 就不会出现这个问题
+        View headerView = LayoutInflater.from(this).inflate(R.layout.item_header_footer, null);
+        helper.addHeader(headerView);
 
         final LoadMoreHelper loadMoreHelper = new LoadMoreHelper(helper);
         loadMoreHelper.setLoadMoreListener(new OnLoadMoreListener() {
@@ -55,7 +59,7 @@ public class HeaderFooterActivity extends BaseActivity {
                     public void run() {
                         Toast.makeText(HeaderFooterActivity.this, "load succeed", Toast.LENGTH_SHORT).show();
                         loadMoreHelper.setLoadCompleted();
-//                        loadMoreHelper.closeLoadMore();
+                        loadMoreHelper.closeLoadMore();
                     }
                 }, 1000);
             }
@@ -63,5 +67,26 @@ public class HeaderFooterActivity extends BaseActivity {
 
         recyclerView.setAdapter(loadMoreHelper);
         helper.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.header_footer, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_header:
+                return true;
+            case R.id.action_add_footer:
+                return true;
+            case R.id.action_remove_header:
+                return true;
+            case R.id.action_remove_footer:
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

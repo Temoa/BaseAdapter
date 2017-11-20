@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_add_header"
+        android:title="添加头部" />
+
+    <item
+        android:id="@+id/action_add_footer"
+        android:title="添加底部" />
+
+    <item
+        android:id="@+id/action_remove_header"
+        android:title="移除头部" />
+
+    <item
+        android:id="@+id/action_remove_footer"
+        android:title="移除底部" />
+</menu>
