@@ -1,4 +1,4 @@
-package me.temoa.baseadapter.adapter;
+package me.temoa.baseadapter.item_touch_helper;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import me.temoa.base.adapter.BaseViewHolder;
+import me.temoa.baseadapter.adapter.SimpleStringAdapter;
 import me.temoa.baseadapter.item_touch_helper.ItemTouchHelperAdapter;
 import me.temoa.baseadapter.R;
 

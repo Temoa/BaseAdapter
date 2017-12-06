@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import me.temoa.baseadapter.R;
+import me.temoa.baseadapter.expand.ExpandItemActivity;
+import me.temoa.baseadapter.item_touch_helper.TouchItemActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 toActivity(TouchItemActivity.class);
                 break;
             case R.id.btn5:
+                toActivity(ExpandItemActivity.class);
                 break;
         }
     }

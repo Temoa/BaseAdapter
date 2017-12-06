@@ -1,4 +1,4 @@
-package me.temoa.baseadapter.activity;
+package me.temoa.baseadapter.item_touch_helper;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,8 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import me.temoa.baseadapter.R;
+import me.temoa.baseadapter.activity.BaseActivity;
 import me.temoa.baseadapter.item_touch_helper.SimpleItemTouchCallback;
-import me.temoa.baseadapter.adapter.TouchSimpleStringAdapter;
+import me.temoa.baseadapter.item_touch_helper.TouchSimpleStringAdapter;
 
 /**
  * Created by lai

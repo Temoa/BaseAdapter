@@ -18,7 +18,8 @@
         <activity android:name=".activity.SimpleItemActivity" />
         <activity android:name=".activity.MultiItemActivity" />
         <activity android:name=".activity.HeaderFooterActivity" />
-        <activity android:name=".activity.TouchItemActivity" />
+        <activity android:name=".item_touch_helper.TouchItemActivity" />
+        <activity android:name=".expand.ExpandItemActivity" />
     </application>
 
 </manifest>
