@@ -25,6 +25,9 @@ import me.temoa.baseadapter.adapter.SimpleStringAdapter;
 
 public class HeaderFooterActivity extends BaseActivity {
 
+    private HeaderFooterHelperAdapter mHeaderFooterHelperAdapter;
+    private View mHeaderFooterView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,30 +43,15 @@ public class HeaderFooterActivity extends BaseActivity {
                 Toast.makeText(HeaderFooterActivity.this, item, Toast.LENGTH_SHORT).show();
             }
         });
-        final HeaderFooterHelperAdapter headerFooterHelperAdapter = new HeaderFooterHelperAdapter(adapter);
+        mHeaderFooterHelperAdapter = new HeaderFooterHelperAdapter(adapter);
         // 这里遇到一个坑
         // 这里给 Adapter 传入一个 View 用于创建 ViewHolder, 就无法传入 onCreateViewHolder() 的参数 parent
         // 如果item 的布局的根布局是除 RelativeLayout 之外的其他布局或者只有一个view，会导致无法居中的问题
         // 但是如果跟布局是 RelativeLayout 就不会出现这个问题
-        View headerView = LayoutInflater.from(this).inflate(R.layout.item_header_footer, null);
-        headerFooterHelperAdapter.addHeader(headerView);
-
-        final LoadMoreHelperAdapter loadMoreHelperAdapter = new LoadMoreHelperAdapter(headerFooterHelperAdapter);
-        loadMoreHelperAdapter.setLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                recyclerView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(HeaderFooterActivity.this, "load succeed", Toast.LENGTH_SHORT).show();
-                        loadMoreHelperAdapter.setLoadCompleted();
-                    }
-                }, 1000);
-            }
-        });
-
-        recyclerView.setAdapter(loadMoreHelperAdapter);
-        headerFooterHelperAdapter.notifyDataSetChanged();
+        mHeaderFooterView = LayoutInflater.from(this).inflate(R.layout.item_header_footer, null);
+        mHeaderFooterHelperAdapter.addHeader(mHeaderFooterView);
+        mHeaderFooterHelperAdapter.addFooter(mHeaderFooterView);
+        recyclerView.setAdapter(mHeaderFooterHelperAdapter);
     }
 
     @Override
@@ -76,12 +64,16 @@ public class HeaderFooterActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_header:
+                mHeaderFooterHelperAdapter.addHeader(mHeaderFooterView);
                 return true;
             case R.id.action_add_footer:
+                mHeaderFooterHelperAdapter.addFooter(mHeaderFooterView);
                 return true;
             case R.id.action_remove_header:
+                mHeaderFooterHelperAdapter.removeHeader();
                 return true;
             case R.id.action_remove_footer:
+                mHeaderFooterHelperAdapter.removeFooter();
                 return true;
         }
         return super.onOptionsItemSelected(item);

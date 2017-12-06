@@ -1,6 +1,7 @@
 package me.temoa.base.adapter.helper;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,18 +23,22 @@ public class HeaderFooterHelperAdapter extends RecyclerView.Adapter<BaseViewHold
 
     public void addHeader(View v) {
         mHeaderView = v;
+        notifyItemInserted(0);
     }
 
     public void addFooter(View v) {
         mFooterView = v;
+        notifyItemInserted(getItemCount() - 1);
     }
 
     public void removeHeader() {
         mHeaderView = null;
+        notifyItemRemoved(0);
     }
 
     public void removeFooter() {
         mFooterView = null;
+        notifyItemRemoved(getItemCount() - 1);
     }
 
     private int getHeaderCount() {

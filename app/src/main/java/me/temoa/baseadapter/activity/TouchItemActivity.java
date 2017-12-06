@@ -3,9 +3,13 @@ package me.temoa.baseadapter.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import me.temoa.baseadapter.R;
 import me.temoa.baseadapter.item_touch_helper.SimpleItemTouchCallback;
 import me.temoa.baseadapter.adapter.TouchSimpleStringAdapter;
 
@@ -24,11 +28,31 @@ public class TouchItemActivity extends BaseActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
 
-        TouchSimpleStringAdapter adapter = new TouchSimpleStringAdapter(this, getData());
-        SimpleItemTouchCallback simpleItemTouchCallback = new SimpleItemTouchCallback(adapter);
-        simpleItemTouchCallback.setTouchFlag(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT);
+        TouchSimpleStringAdapter touchSimpleStringAdapter = new TouchSimpleStringAdapter(this, getData());
+        SimpleItemTouchCallback simpleItemTouchCallback = new SimpleItemTouchCallback(touchSimpleStringAdapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(touchSimpleStringAdapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.touch_item, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_linear:
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                break;
+            case R.id.action_grid:
+                recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

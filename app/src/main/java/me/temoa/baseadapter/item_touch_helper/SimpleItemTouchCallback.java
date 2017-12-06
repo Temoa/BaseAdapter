@@ -1,9 +1,9 @@
 package me.temoa.baseadapter.item_touch_helper;
 
-import android.content.Context;
-import android.graphics.Canvas;
-import android.os.Build;
+import android.graphics.Color;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
 /**
@@ -16,20 +16,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 public class SimpleItemTouchCallback extends ItemTouchHelper.Callback {
 
     private ItemTouchHelperAdapter mAdapter;
-    private int mDragFlag, mSwipeFlag;
-
-    /**
-     * @param dragFlag  ItemTouchHelper.UP
-     *                  ItemTouchHelper.DOWN
-     *                  ItemTouchHelper.UP | itemTouchHelper.DOWN
-     * @param swipeFlag ItemTouchHelper.START
-     *                  ItemTouchHelper.END
-     *                  ItemTouchHelper.START | ItemTouchHelper.END
-     */
-    public void setTouchFlag(int dragFlag, int swipeFlag) {
-        mDragFlag = dragFlag;
-        mSwipeFlag = swipeFlag;
-    }
 
     public SimpleItemTouchCallback(ItemTouchHelperAdapter adapter) {
         mAdapter = adapter;
@@ -37,7 +23,16 @@ public class SimpleItemTouchCallback extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        return makeMovementFlags(mDragFlag, mSwipeFlag);
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (layoutManager instanceof GridLayoutManager || layoutManager instanceof StaggeredGridLayoutManager) {
+            final int dragFlag = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+            final int swipeFlag = 0;
+            return makeMovementFlags(dragFlag, swipeFlag);
+        } else {
+            final int dragFlag = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+            final int swipeFlag = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+            return makeMovementFlags(dragFlag, swipeFlag);
+        }
     }
 
     @Override
@@ -55,21 +50,17 @@ public class SimpleItemTouchCallback extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
-                viewHolder.itemView.setElevation(dp2px(recyclerView.getContext(), 6));
-            }
+    public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+            viewHolder.itemView.setBackgroundColor(Color.GRAY);
         }
+        super.onSelectedChanged(viewHolder, actionState);
     }
 
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            viewHolder.itemView.setElevation(dp2px(recyclerView.getContext(), 2));
-        }
+        viewHolder.itemView.setBackgroundColor(Color.WHITE);
     }
 
     @Override
@@ -80,10 +71,5 @@ public class SimpleItemTouchCallback extends ItemTouchHelper.Callback {
     @Override
     public boolean isItemViewSwipeEnabled() {
         return true;
-    }
-
-    private int dp2px(Context context, float dpValue) {
-        float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
     }
 }

@@ -1,12 +1,9 @@
 package me.temoa.baseadapter.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -25,7 +22,7 @@ public class SimpleItemActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_base);
 
         recyclerView = findViewById(R.id.main_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -72,24 +69,6 @@ public class SimpleItemActivity extends BaseActivity {
                 adapter.setNewData(getData());
                 helper.notifyDataSetChanged();
             }
-        }, 5000);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_multi) {
-            startActivity(new Intent(this, MultiItemActivity.class));
-        } else if (item.getItemId() == R.id.action_header_footer) {
-            startActivity(new Intent(this, HeaderFooterActivity.class));
-        } else if (item.getItemId() == R.id.action_touch) {
-            startActivity(new Intent(this, TouchItemActivity.class));
-        }
-        return super.onOptionsItemSelected(item);
+        }, 1000);
     }
 }
