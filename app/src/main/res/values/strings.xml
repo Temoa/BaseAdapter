@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">BaseAdapter</string>
     <string name="empty">oh! empty</string>
+    <string name="click_to_refresh">Click to refresh</string>
 </resources>

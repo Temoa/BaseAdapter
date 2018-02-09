@@ -1,7 +1,6 @@
 package me.temoa.base.adapter.helper;
 
 import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,16 +86,17 @@ public class HeaderFooterHelperAdapter extends RecyclerView.Adapter<BaseViewHold
             return mInnerAdapter.getItemViewType(position - getHeaderCount());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onViewAttachedToWindow(BaseViewHolder holder) {
-        super.onViewAttachedToWindow(holder);
+        mInnerAdapter.onViewAttachedToWindow(holder);
         LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_HEADER);
         LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_FOOTER);
     }
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
+        mInnerAdapter.onAttachedToRecyclerView(recyclerView);
         final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         LayoutFullSpanUtils.fixGridLayoutFullSpanView(this, layoutManager, Constants.VIEW_TYPE_HEADER);
         LayoutFullSpanUtils.fixGridLayoutFullSpanView(this, layoutManager, Constants.VIEW_TYPE_FOOTER);

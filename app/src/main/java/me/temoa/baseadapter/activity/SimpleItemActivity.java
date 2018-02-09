@@ -1,10 +1,12 @@
 package me.temoa.baseadapter.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import me.temoa.base.adapter.helper.EmptyHelperAdapter;
@@ -43,8 +45,20 @@ public class SimpleItemActivity extends BaseActivity {
             }
         });
         final EmptyHelperAdapter helper1 = new EmptyHelperAdapter(adapter);
-        helper1.setEmptyView(R.layout.item_empty);
         final LoadMoreHelperAdapter helper = new LoadMoreHelperAdapter(helper1);
+
+        @SuppressLint("InflateParams")
+        View emptyView = getLayoutInflater().inflate(R.layout.item_empty, null, false);
+        Button button = emptyView.findViewById(R.id.item_empty_btn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.setNewData(getData());
+                helper.notifyDataSetChanged();
+            }
+        });
+        helper1.setEmptyView(emptyView);
+
         helper.openLoadMore();
         helper.setLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -63,12 +77,5 @@ public class SimpleItemActivity extends BaseActivity {
             }
         });
         recyclerView.setAdapter(helper);
-        recyclerView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                adapter.setNewData(getData());
-                helper.notifyDataSetChanged();
-            }
-        }, 1000);
     }
 }

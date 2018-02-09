@@ -95,9 +95,10 @@ public class LoadMoreHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> 
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onViewAttachedToWindow(BaseViewHolder holder) {
-        super.onViewAttachedToWindow(holder);
+        mInnerAdapter.onViewAttachedToWindow(holder);
         if (isOpenLoadMore) {
             LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_LOAD);
         }
@@ -105,7 +106,7 @@ public class LoadMoreHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> 
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
+        mInnerAdapter.onAttachedToRecyclerView(recyclerView);
         final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (isOpenLoadMore) {
             LayoutFullSpanUtils.fixGridLayoutFullSpanView(this, layoutManager, Constants.VIEW_TYPE_LOAD);
