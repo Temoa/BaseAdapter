@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import me.temoa.base.adapter.BaseViewHolder;
 import me.temoa.base.adapter.helper.EmptyHelperAdapter;
 import me.temoa.base.adapter.helper.LoadMoreHelperAdapter;
 import me.temoa.base.adapter.listener.OnItemClickListener;
@@ -44,8 +46,8 @@ public class SimpleItemActivity extends BaseActivity {
                 Toast.makeText(SimpleItemActivity.this, item + " [long click]" + position, Toast.LENGTH_SHORT).show();
             }
         });
-        final EmptyHelperAdapter helper1 = new EmptyHelperAdapter(adapter);
-        final LoadMoreHelperAdapter helper = new LoadMoreHelperAdapter(helper1);
+        final EmptyHelperAdapter emptyHelperAdapter = new EmptyHelperAdapter(adapter);
+        final LoadMoreHelperAdapter loadMoreHelperAdapter = new MyLoadMoreAdapter(emptyHelperAdapter);
 
         @SuppressLint("InflateParams")
         View emptyView = getLayoutInflater().inflate(R.layout.item_empty, null, false);
@@ -53,29 +55,67 @@ public class SimpleItemActivity extends BaseActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loadMoreHelperAdapter.isLoadMoreEnable(true);
                 adapter.setNewData(getData());
-                helper.notifyDataSetChanged();
             }
         });
-        helper1.setEmptyView(emptyView);
+        emptyHelperAdapter.setEmptyView(emptyView);
 
-        helper.openLoadMore();
-        helper.setLoadMoreListener(new OnLoadMoreListener() {
+        loadMoreHelperAdapter.isLoadMoreEnable(false);
+        loadMoreHelperAdapter.setLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 recyclerView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         loadCount++;
-                        helper.setLoadCompleted();
-                        adapter.addData(getMoreData());
-                        if (loadCount >= 3) {
-                            helper.closeLoadMore();
+                        if (loadCount == 2) {
+                            loadMoreHelperAdapter.setLoadStatus(LoadMoreHelperAdapter.STATUS_ERROR);
+                            return;
                         }
+                        if (loadCount >= 4) {
+                            loadMoreHelperAdapter.setLoadStatus(LoadMoreHelperAdapter.STATUS_EMPTY);
+                            return;
+                        }
+                        adapter.addData(getMoreData());
+                        loadMoreHelperAdapter.setLoadStatus(LoadMoreHelperAdapter.STATUS_COMPLETED);
                     }
                 }, 1000);
             }
         });
-        recyclerView.setAdapter(helper);
+        recyclerView.setAdapter(loadMoreHelperAdapter);
+    }
+
+    class MyLoadMoreAdapter extends LoadMoreHelperAdapter {
+
+        MyLoadMoreAdapter(RecyclerView.Adapter innerAdapter) {
+            super(innerAdapter);
+            setLoadView(R.layout.item_load_more);
+        }
+
+        @Override
+        protected void onLoadStatusChange(BaseViewHolder holder, int position, int status) {
+            switch (status) {
+                case STATUS_LOADING:
+                    holder.setVisible(R.id.item_load_progress_bar, true);
+                    holder.setText(R.id.item_load_tv, "正在刷新");
+                    break;
+                case STATUS_EMPTY:
+                    holder.setVisible(R.id.item_load_progress_bar, false);
+                    holder.setText(R.id.item_load_tv, "- 没有更多数据 -");
+                    break;
+                case STATUS_COMPLETED:
+                    holder.setVisible(R.id.item_load_progress_bar, true);
+                    holder.setText(R.id.item_load_tv, "加载完成");
+                    break;
+                case STATUS_ERROR:
+                    holder.setVisible(R.id.item_load_progress_bar, false);
+                    holder.setText(R.id.item_load_tv, "- 加载失败 -");
+                    break;
+                case STATUS_PREPARE:
+                    holder.setVisible(R.id.item_load_progress_bar, true);
+                    holder.setText(R.id.item_load_tv, "");
+            }
+        }
     }
 }
