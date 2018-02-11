@@ -59,7 +59,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public BaseViewHolder setBackroundColor(int viewId, int color) {
+    public BaseViewHolder setBackgroundColor(int viewId, int color) {
         View v = getView(viewId);
         v.setBackgroundColor(color);
         return this;

@@ -19,7 +19,8 @@
         <activity android:name=".activity.MultiItemActivity" />
         <activity android:name=".activity.HeaderFooterActivity" />
         <activity android:name=".item_touch_helper.TouchItemActivity" />
-        <activity android:name=".expand.ExpandItemActivity" />
+        <activity android:name=".expand.ExpandItemActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>

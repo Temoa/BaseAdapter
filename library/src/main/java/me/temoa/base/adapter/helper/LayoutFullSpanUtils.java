@@ -11,10 +11,10 @@ import me.temoa.base.adapter.BaseViewHolder;
  * Created by lai
  * on 2017/11/20.
  */
+@SuppressWarnings("WeakerAccess") // public api
+public class LayoutFullSpanUtils {
 
-class LayoutFullSpanUtils {
-
-    static void fixStaggeredGridLayoutFullSpanView(
+    public static void fixStaggeredGridLayoutFullSpanView(
             RecyclerView.Adapter adapter,
             BaseViewHolder holder,
             int viewType) {
@@ -26,7 +26,7 @@ class LayoutFullSpanUtils {
         }
     }
 
-    static void fixGridLayoutFullSpanView(
+    public static void fixGridLayoutFullSpanView(
             final RecyclerView.Adapter adapter,
             RecyclerView.LayoutManager layoutManager,
             final int viewType) {

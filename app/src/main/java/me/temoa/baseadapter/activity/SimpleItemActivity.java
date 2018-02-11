@@ -3,9 +3,12 @@ package me.temoa.baseadapter.activity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -31,7 +34,6 @@ public class SimpleItemActivity extends BaseActivity {
         recyclerView = findViewById(R.id.main_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         final SimpleStringAdapter adapter = new SimpleStringAdapter(this, null);
         adapter.setItemClickListener(new OnItemClickListener<String>() {
@@ -117,5 +119,27 @@ public class SimpleItemActivity extends BaseActivity {
                     holder.setText(R.id.item_load_tv, "");
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.simple_item, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_linear:
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                break;
+            case R.id.action_grid:
+                recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+                break;
+            case R.id.action_str:
+                recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, 1));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

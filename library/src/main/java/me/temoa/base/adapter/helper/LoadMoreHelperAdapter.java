@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import me.temoa.base.adapter.BaseAdapter;
 import me.temoa.base.adapter.BaseViewHolder;
 import me.temoa.base.adapter.R;
 import me.temoa.base.adapter.listener.OnLoadMoreListener;
@@ -16,9 +17,10 @@ import me.temoa.base.adapter.listener.OnLoadMoreListener;
  * Created by lai
  * on 2017/11/11.
  * <p>
- * 解决 Called attach on a child which is not detached: ViewHolder. 原因还不明,在研究
+ * 解决 Called attach on a child which is not detached: ViewHolder. 在研究
  * ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
  */
+@SuppressWarnings({"unused", "WeakerAccess"}) // public api
 public class LoadMoreHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     public static final int STATUS_PREPARE = 0;
@@ -133,9 +135,7 @@ public class LoadMoreHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> 
     @Override
     public void onViewAttachedToWindow(BaseViewHolder holder) {
         mInnerAdapter.onViewAttachedToWindow(holder);
-        if (isLoadMoreEnable) {
-            LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_LOAD);
-        }
+        LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_LOAD);
     }
 
     @Override
@@ -147,10 +147,8 @@ public class LoadMoreHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> 
          */
         ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         setLoadMoreMode(recyclerView);
-        if (isLoadMoreEnable) {
-            final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-            LayoutFullSpanUtils.fixGridLayoutFullSpanView(this, layoutManager, Constants.VIEW_TYPE_LOAD);
-        }
+        final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        LayoutFullSpanUtils.fixGridLayoutFullSpanView(this, layoutManager, Constants.VIEW_TYPE_LOAD);
     }
 
     private void setLoadMoreMode(RecyclerView recyclerView) {
@@ -162,7 +160,6 @@ public class LoadMoreHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> 
                     int lastVisibleItem = findLastVisibleItemPosition(recyclerView.getLayoutManager());
                     if (isLoadMoreEnable && !isNoMoreData && isScrollDown && !isLoading && lastVisibleItem + 1 == getItemCount()) {
                         mLoadMoreListener.onLoadMore();
-                        isLoading = true;
                         setLoadStatus(STATUS_LOADING);
                     }
                 }

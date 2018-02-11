@@ -14,7 +14,7 @@ import me.temoa.base.adapter.BaseViewHolder;
  * on 2017/11/11.
  * 如果用网格布局的话，设置空布局无法全屏(可以通过瀑布布局曲线救国)
  */
-
+@SuppressWarnings("unused") // public api
 public class EmptyHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private int mEmptyViewLayoutId;

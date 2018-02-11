@@ -11,7 +11,7 @@ import me.temoa.base.adapter.BaseViewHolder;
  * Created by lai
  * on 2017/11/11.
  */
-
+@SuppressWarnings("unused") // public api
 public class HeaderFooterHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @NonNull
