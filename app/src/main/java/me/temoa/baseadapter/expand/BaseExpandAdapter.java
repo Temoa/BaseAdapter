@@ -16,6 +16,7 @@ import me.temoa.base.adapter.BaseViewHolder;
  * on 2017/12/4.
  */
 
+@SuppressWarnings({"unused", "WeakerAccess"}) // public api
 public abstract class BaseExpandAdapter<T, V> extends RecyclerView.Adapter<BaseViewHolder> {
 
     protected Context mContext;
