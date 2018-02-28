@@ -1,12 +1,13 @@
 package me.temoa.baseadapter.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import me.temoa.baseadapter.R;
 import me.temoa.baseadapter.expand.ExpandItemActivity;
+import me.temoa.baseadapter.item_decoration.ItemDecorationActivity;
 import me.temoa.baseadapter.item_touch_helper.TouchItemActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.btn5:
                 toActivity(ExpandItemActivity.class);
+                break;
+            case R.id.btn6:
+                toActivity(ItemDecorationActivity.class);
                 break;
         }
     }

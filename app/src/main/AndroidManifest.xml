@@ -21,6 +21,8 @@
         <activity android:name=".item_touch_helper.TouchItemActivity" />
         <activity android:name=".expand.ExpandItemActivity"
             android:exported="true"/>
+        <activity android:name=".item_decoration.ItemDecorationActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>
