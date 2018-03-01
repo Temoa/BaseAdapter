@@ -19,10 +19,15 @@
         <activity android:name=".activity.MultiItemActivity" />
         <activity android:name=".activity.HeaderFooterActivity" />
         <activity android:name=".item_touch_helper.TouchItemActivity" />
-        <activity android:name=".expand.ExpandItemActivity"
-            android:exported="true"/>
-        <activity android:name=".item_decoration.ItemDecorationActivity"
-            android:exported="true"/>
+        <activity
+            android:name=".expand.ExpandItemActivity"
+            android:exported="true" />
+        <activity
+            android:name=".item_decoration.ItemDecorationActivity"
+            android:exported="true" />
+        <activity
+            android:name=".item_decoration.StickyActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
