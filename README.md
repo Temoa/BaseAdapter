@@ -70,14 +70,14 @@ final EmptyHelperAdapter emptyHelperAdapter = new EmptyHelperAdapter(simpleBaseA
 emptyHelperAdapter.setEmptyView(emptyView);
 ```
 
-### HeaderFooterHelperAdapter 头部底部
+### HeaderFooterHelperAdapter
 ```java
 HeaderFooterHelperAdapter headerFooterHelperAdapter = new HeaderFooterHelperAdapter(simpleBaseAdapter);
 headerFooterHelperAdapter.addHeader(headerView);
 headerFooterHelperAdapter.addFooter(footerView);
 ```
 
-### LoadMoreHelperAdapter 加载更多
+### LoadMoreHelperAdapter
 ```java
 final LoadMoreHelperAdapter loadMoreHelperAdapter = new MyLoadMoreAdapter(simpleBaseAdapter);
 loadMoreHelperAdapter.isLoadMoreEnable(true);
