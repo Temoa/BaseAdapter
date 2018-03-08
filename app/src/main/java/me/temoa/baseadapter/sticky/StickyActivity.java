@@ -1,4 +1,4 @@
-package me.temoa.baseadapter.item_decoration;
+package me.temoa.baseadapter.sticky;
 
 import android.content.Context;
 import android.os.Bundle;

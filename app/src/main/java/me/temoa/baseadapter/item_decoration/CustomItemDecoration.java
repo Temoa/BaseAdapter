@@ -11,9 +11,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.ColorInt;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -21,7 +19,7 @@ import android.view.View;
  * on 2018/2/28.
  */
 
-@SuppressWarnings({"WeakerAccess"}) // public api
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class CustomItemDecoration extends RecyclerView.ItemDecoration {
 
     private static final String TAG = "CustomItemDecoration";
@@ -31,7 +29,6 @@ public class CustomItemDecoration extends RecyclerView.ItemDecoration {
     private Style mStyle = Style.DEFAULT;
     private Drawable mDivider;
     private final Rect mBounds = new Rect();
-    private int color;
     private int mMarginLeft = 0;
     private int mMarginRight = 0;
     private Paint mPaint;
@@ -48,6 +45,11 @@ public class CustomItemDecoration extends RecyclerView.ItemDecoration {
             final TypedArray a = builder.mContext.obtainStyledAttributes(ATTRS);
             mDivider = a.getDrawable(0);
             a.recycle();
+            int color = builder.mColor;
+            if (color != 0) {
+                int size = mDivider.getIntrinsicHeight();
+                mDivider = new DividerDrawable(color, size);
+            }
         } else if (mStyle == Style.DRAWABLE) {
             mDivider = builder.mDrawable;
         } else {
@@ -64,17 +66,6 @@ public class CustomItemDecoration extends RecyclerView.ItemDecoration {
 
         mMarginLeft = builder.mMarginLeft;
         mMarginRight = builder.mMarginRight;
-    }
-
-    public void setColor(@ColorInt int color) {
-        if (color == 0) {
-            throw new IllegalArgumentException("Color cannot be 0.");
-        }
-        int size = 1;
-        if (mDivider != null) {
-            size = mDivider.getIntrinsicHeight();
-        }
-        mDivider = new DividerDrawable(color, size);
     }
 
     @Override
@@ -110,7 +101,6 @@ public class CustomItemDecoration extends RecyclerView.ItemDecoration {
                 mDivider.draw(c);
             } else {
                 // draw path
-                Log.d(TAG, "onDraw: ");
                 Path path = new Path();
                 path.moveTo(left, bottom);
                 path.lineTo(right, bottom);
@@ -134,7 +124,7 @@ public class CustomItemDecoration extends RecyclerView.ItemDecoration {
         private Context mContext;
         private Style mStyle;
         private Drawable mDrawable;
-        private int mColor;
+        private int mColor = 0;
         private int mMarginLeft = 0;
         private int mMarginRight = 0;
         private Paint mPaint;

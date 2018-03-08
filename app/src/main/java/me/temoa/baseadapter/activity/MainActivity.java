@@ -7,8 +7,7 @@ import android.view.View;
 
 import me.temoa.baseadapter.R;
 import me.temoa.baseadapter.expand.ExpandItemActivity;
-import me.temoa.baseadapter.item_decoration.ItemDecorationActivity;
-import me.temoa.baseadapter.item_decoration.StickyActivity;
+import me.temoa.baseadapter.sticky.StickyActivity;
 import me.temoa.baseadapter.item_touch_helper.TouchItemActivity;
 
 public class MainActivity extends AppCompatActivity {

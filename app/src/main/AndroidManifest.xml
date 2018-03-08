@@ -26,7 +26,10 @@
             android:name=".item_decoration.ItemDecorationActivity"
             android:exported="true" />
         <activity
-            android:name=".item_decoration.StickyActivity"
+            android:name=".sticky.StickyActivity"
+            android:exported="true" />
+        <activity
+            android:name=".snap_helper.SnapHelperActivity"
             android:exported="true" />
     </application>
 

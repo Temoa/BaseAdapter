@@ -15,6 +15,8 @@ import android.view.View;
 /**
  * Created by lai
  * on 2018/3/1.
+ * <p>
+ * 分割线实现吸顶的效果
  */
 
 public class StickyHeaderDecoration extends RecyclerView.ItemDecoration {
