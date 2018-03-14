@@ -19,17 +19,12 @@
         <activity android:name=".activity.MultiItemActivity" />
         <activity android:name=".activity.HeaderFooterActivity" />
         <activity android:name=".item_touch_helper.TouchItemActivity" />
+        <activity android:name=".expand.ExpandItemActivity" />
+        <activity android:name=".item_decoration.ItemDecorationActivity" />
+        <activity android:name=".sticky.StickyActivity" />
+        <activity android:name=".snap_helper.SnapHelperActivity" />
         <activity
-            android:name=".expand.ExpandItemActivity"
-            android:exported="true" />
-        <activity
-            android:name=".item_decoration.ItemDecorationActivity"
-            android:exported="true" />
-        <activity
-            android:name=".sticky.StickyActivity"
-            android:exported="true" />
-        <activity
-            android:name=".snap_helper.SnapHelperActivity"
+            android:name=".animation.RecyclerViewAnimationActivity"
             android:exported="true" />
     </application>
 

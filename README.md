@@ -100,4 +100,8 @@ loadMoreHelperAdapter.setLoadStatus(LoadMoreHelperAdapter.STATUS_COMPLETED)
 
 * [自定义分割线](https://github.com/Temoa/BaseAdapter/tree/master/app/src/main/java/me/temoa/baseadapter/item_decoration)
 
-* [吸顶效果 | 两种实现方式一种是分割线完成的, 一种是监听 RecyclerView 滑动完成](https://github.com/Temoa/BaseAdapter/tree/master/app/src/main/java/me/temoa/baseadapter/item_decoration)
+* 吸顶效果 
+
+    * [一种是分割线完成的](https://github.com/Temoa/BaseAdapter/tree/master/app/src/main/java/me/temoa/baseadapter/item_decoration)
+
+    * [一种是监听 RecyclerView 滑动完成](https://github.com/Temoa/BaseAdapter/tree/master/app/src/main/java/me/temoa/baseadapter/sticky)

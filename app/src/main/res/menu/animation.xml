@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText">
+    <item
+        android:title="layout"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/action_layout_1"
+                android:title="LinearLayoutManger" />
+
+            <item
+                android:id="@+id/action_layout_2"
+                android:title="GridLayoutManager" />
+        </menu>
+    </item>
+
+    <item
+        android:title="anim"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/action_anim_1"
+                android:title="fall down" />
+
+            <item
+                android:id="@+id/action_anim_2"
+                android:title="right in" />
+
+            <item
+                android:id="@+id/action_anim_3"
+                android:title="bottom in" />
+        </menu>
+    </item>
+</menu>
