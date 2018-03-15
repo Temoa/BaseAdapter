@@ -64,6 +64,7 @@ public class RecyclerViewAnimationActivity extends BaseActivity {
         LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(this, animResId);
         recyclerView.setLayoutAnimation(animationController);
 
+        recyclerView.getRecycledViewPool().clear();
         mMyAdapter.notifyDataSetChanged();
 
 //        recyclerView.scheduleLayoutAnimation();
@@ -84,6 +85,7 @@ public class RecyclerViewAnimationActivity extends BaseActivity {
                 } else {
                     animResId = R.anim.layout_anim_linear_fall_down;
                 }
+                reload(null);
                 break;
             case R.id.action_anim_2:
                 if (mMyAdapter.getLayoutManager() instanceof GridLayoutManager) {
@@ -91,6 +93,7 @@ public class RecyclerViewAnimationActivity extends BaseActivity {
                 } else {
                     animResId = R.anim.layout_anim_linear_right_in;
                 }
+                reload(null);
                 break;
             case R.id.action_anim_3:
                 if (mMyAdapter.getLayoutManager() instanceof GridLayoutManager) {
@@ -98,14 +101,19 @@ public class RecyclerViewAnimationActivity extends BaseActivity {
                 } else {
                     animResId = R.anim.layout_anim_linear_bottom_in;
                 }
+                reload(null);
                 break;
             case R.id.action_layout_1:
                 mMyAdapter.setLayoutManager(mLinearLayoutManager);
+                mMyAdapter.notifyDataSetChanged();
                 animResId = R.anim.layout_anim_linear_fall_down;
+                reload(null);
                 break;
             case R.id.action_layout_2:
                 mMyAdapter.setLayoutManager(mGridLayoutManager);
+                recyclerView.setLayoutManager(mGridLayoutManager);
                 animResId = R.anim.layout_anim_grid_fall_down;
+                reload(null);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -132,7 +140,7 @@ public class RecyclerViewAnimationActivity extends BaseActivity {
                 int width = Resources.getSystem().getDisplayMetrics().widthPixels;
                 View itemView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_card_grid, parent, false);
-                GridLayoutManager.LayoutParams lp = (GridLayoutManager.LayoutParams) itemView.getLayoutParams();
+                RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) itemView.getLayoutParams();
                 lp.width = width / 4 - 2;
                 lp.height = width / 4 - 2;
                 itemView.setLayoutParams(lp);
