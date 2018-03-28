@@ -16,8 +16,6 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
-import java.util.List;
-
 import me.temoa.base.adapter.BaseViewHolder;
 import me.temoa.baseadapter.R;
 import me.temoa.baseadapter.activity.BaseActivity;

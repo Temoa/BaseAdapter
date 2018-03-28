@@ -16,6 +16,8 @@ import me.temoa.base.adapter.listener.OnItemLongClickListener;
  * Created by Lai
  * on 2017/8/27 17:33
  */
+
+@SuppressWarnings({"unused", "WeakerAccess"}) // public api
 public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
 
     protected LayoutInflater mLayoutInflater;
@@ -52,9 +54,28 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     }
 
     public void addData(List<T> items) {
+        if (mItems == null) {
+            mItems = new ArrayList<>();
+        }
         int originalSize = mItems.size();
         mItems.addAll(items);
         notifyItemRangeInserted(originalSize, items.size());
+    }
+
+    public void addData(T item) {
+        if (mItems == null) {
+            mItems = new ArrayList<>();
+        }
+        mItems.add(item);
+        notifyItemChanged(getItemCount() - 1);
+    }
+
+    public void addData(int position, T item) {
+        if (mItems == null) {
+            mItems = new ArrayList<>();
+        }
+        mItems.add(position, item);
+        notifyItemChanged(position);
     }
 
     /* ------------------------------------------------------------------------------------------ */
