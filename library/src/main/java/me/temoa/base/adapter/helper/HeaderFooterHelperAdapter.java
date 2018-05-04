@@ -52,8 +52,9 @@ public class HeaderFooterHelperAdapter extends RecyclerView.Adapter<BaseViewHold
         this.mInnerAdapter = innerAdapter;
     }
 
+    @NonNull
     @Override
-    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (mHeaderView != null && viewType == Constants.VIEW_TYPE_HEADER) {
             return new BaseViewHolder(mHeaderView);
         } else if (mFooterView != null && viewType == Constants.VIEW_TYPE_FOOTER) {
@@ -65,7 +66,7 @@ public class HeaderFooterHelperAdapter extends RecyclerView.Adapter<BaseViewHold
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onBindViewHolder(BaseViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         if (getItemViewType(position) == Constants.VIEW_TYPE_HEADER) return;
         if (getItemViewType(position) == Constants.VIEW_TYPE_FOOTER) return;
         mInnerAdapter.onBindViewHolder(holder, position - getHeaderCount());
@@ -88,14 +89,14 @@ public class HeaderFooterHelperAdapter extends RecyclerView.Adapter<BaseViewHold
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onViewAttachedToWindow(BaseViewHolder holder) {
+    public void onViewAttachedToWindow(@NonNull BaseViewHolder holder) {
         mInnerAdapter.onViewAttachedToWindow(holder);
         LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_HEADER);
         LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_FOOTER);
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         mInnerAdapter.onAttachedToRecyclerView(recyclerView);
         final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         LayoutFullSpanUtils.fixGridLayoutFullSpanView(this, layoutManager, Constants.VIEW_TYPE_HEADER);

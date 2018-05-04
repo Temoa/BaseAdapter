@@ -35,57 +35,48 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return (T) view;
     }
 
-    public BaseViewHolder setText(int viewId, String text) {
+    public void setText(int viewId, String text) {
         TextView tv = getView(viewId);
         tv.setText(text);
-        return this;
     }
 
-    public BaseViewHolder setTextColor(int viewId, int color) {
+    public void setTextColor(int viewId, int color) {
         TextView tv = getView(viewId);
         tv.setTextColor(color);
-        return this;
     }
 
-    public BaseViewHolder setImageResource(int viewId, int drawableId) {
+    public void setImageResource(int viewId, int drawableId) {
         ImageView iv = getView(viewId);
         iv.setImageResource(drawableId);
-        return this;
     }
 
-    public BaseViewHolder setImageBitmap(int viewId, Bitmap bitmap) {
+    public void setImageBitmap(int viewId, Bitmap bitmap) {
         ImageView iv = getView(viewId);
         iv.setImageBitmap(bitmap);
-        return this;
     }
 
-    public BaseViewHolder setBackgroundColor(int viewId, int color) {
+    public void setBackgroundColor(int viewId, int color) {
         View v = getView(viewId);
         v.setBackgroundColor(color);
-        return this;
     }
 
-    public BaseViewHolder setBackgroundResource(int viewId, int drawableId) {
+    public void setBackgroundResource(int viewId, int drawableId) {
         View v = getView(viewId);
         v.setBackgroundResource(drawableId);
-        return this;
     }
 
-    public BaseViewHolder setVisible(int viewId, boolean visible) {
+    public void setVisible(int viewId, boolean visible) {
         View view = getView(viewId);
         view.setVisibility(visible ? View.VISIBLE : View.GONE);
-        return this;
     }
 
-    public BaseViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
+    public void setOnClickListener(int viewId, View.OnClickListener listener) {
         View view = getView(viewId);
         view.setOnClickListener(listener);
-        return this;
     }
 
-    public BaseViewHolder setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
+    public void setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
         View view = getView(viewId);
         view.setOnLongClickListener(listener);
-        return this;
     }
 }

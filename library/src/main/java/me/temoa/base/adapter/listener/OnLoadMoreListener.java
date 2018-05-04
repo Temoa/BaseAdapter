@@ -6,6 +6,5 @@ package me.temoa.base.adapter.listener;
  */
 
 public interface OnLoadMoreListener {
-
     void onLoadMore();
 }

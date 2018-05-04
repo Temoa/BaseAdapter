@@ -1,6 +1,7 @@
 package me.temoa.base.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,13 +86,14 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         mItems = items == null ? new ArrayList<T>() : items;
     }
 
+    @NonNull
     @Override
-    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return null;
     }
 
     @Override
-    public void onBindViewHolder(final BaseViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final BaseViewHolder holder, int position) {
         if (!isEnable(holder.getItemViewType())) return;
         if (mItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -1,5 +1,6 @@
 package me.temoa.base.adapter.helper;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -8,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import me.temoa.base.adapter.BaseAdapter;
 import me.temoa.base.adapter.BaseViewHolder;
 import me.temoa.base.adapter.R;
 import me.temoa.base.adapter.listener.OnLoadMoreListener;
@@ -72,8 +72,9 @@ public class LoadMoreHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> 
         this.mInnerAdapter = innerAdapter;
     }
 
+    @NonNull
     @Override
-    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (isLoadMoreEnable && viewType == Constants.VIEW_TYPE_LOAD) {
             if (mLoadView == null && mLoadViewLayoutId == 0)
                 mLoadView = LayoutInflater.from(parent.getContext()).inflate(R.layout.base_item_footer_load, parent, false);
@@ -87,7 +88,7 @@ public class LoadMoreHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> 
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onBindViewHolder(BaseViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         if (isLoadMoreEnable && position == getItemCount() - 1) {
             onLoadStatusChange(holder, position, mLoadStatus);
             return;
@@ -133,13 +134,13 @@ public class LoadMoreHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> 
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onViewAttachedToWindow(BaseViewHolder holder) {
+    public void onViewAttachedToWindow(@NonNull BaseViewHolder holder) {
         mInnerAdapter.onViewAttachedToWindow(holder);
         LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_LOAD);
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         mInnerAdapter.onAttachedToRecyclerView(recyclerView);
         /*
           解决 Called attach on a child which is not detached: ViewHolder

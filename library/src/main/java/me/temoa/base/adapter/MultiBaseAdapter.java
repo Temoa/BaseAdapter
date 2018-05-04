@@ -1,6 +1,7 @@
 package me.temoa.base.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,15 +18,16 @@ public abstract class MultiBaseAdapter<T> extends BaseAdapter<T> {
         super(context, items);
     }
 
+    @NonNull
     @Override
-    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         super.onCreateViewHolder(parent,viewType);
         View itemView = mLayoutInflater.inflate(getItemLayoutId(viewType), parent, false);
         return new BaseViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(BaseViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         int viewType = holder.getItemViewType();
         convert(holder, mItems.get(position), position, viewType);

@@ -39,8 +39,9 @@ public class EmptyHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         this.mInnerAdapter = mInnerAdapter;
     }
 
+    @NonNull
     @Override
-    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (isEmpty()) {
             if (mEmptyView != null) {
                 FrameLayout frameLayout = new FrameLayout(mEmptyView.getContext());
@@ -68,7 +69,7 @@ public class EmptyHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onBindViewHolder(BaseViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         if (!isEmpty()) {
             mInnerAdapter.onBindViewHolder(holder, position);
         }
@@ -88,7 +89,7 @@ public class EmptyHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onViewAttachedToWindow(BaseViewHolder holder) {
+    public void onViewAttachedToWindow(@NonNull BaseViewHolder holder) {
         mInnerAdapter.onViewAttachedToWindow(holder);
         if (isEmpty()) {
             LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_EMPTY);

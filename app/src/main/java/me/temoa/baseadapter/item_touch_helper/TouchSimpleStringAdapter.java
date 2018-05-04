@@ -1,6 +1,7 @@
 package me.temoa.baseadapter.item_touch_helper;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +25,9 @@ public class TouchSimpleStringAdapter extends SimpleStringAdapter implements Ite
         super(context, items);
     }
 
+    @NonNull
     @Override
-    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card, parent, false);
         return new BaseViewHolder(itemView);
     }
