@@ -1,6 +1,7 @@
 package me.temoa.base.adapter.helper;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -136,7 +137,11 @@ public class LoadMoreHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> 
     @Override
     public void onViewAttachedToWindow(@NonNull BaseViewHolder holder) {
         mInnerAdapter.onViewAttachedToWindow(holder);
-        LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_LOAD);
+        if (getItemViewType(holder.getLayoutPosition()) == Constants.VIEW_TYPE_LOAD) {
+            ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+            if (params != null && params instanceof StaggeredGridLayoutManager.LayoutParams)
+                ((StaggeredGridLayoutManager.LayoutParams) params).setFullSpan(true);
+        }
     }
 
     @Override
@@ -149,7 +154,19 @@ public class LoadMoreHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> 
         ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         setLoadMoreMode(recyclerView);
         final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        LayoutFullSpanUtils.fixGridLayoutFullSpanView(this, layoutManager, Constants.VIEW_TYPE_LOAD);
+        if (layoutManager instanceof GridLayoutManager) {
+            GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
+            final int spanCount = gridLayoutManager.getSpanCount();
+            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    if (getItemViewType(position) == Constants.VIEW_TYPE_LOAD) {
+                        return spanCount;
+                    }
+                    return 1;
+                }
+            });
+        }
     }
 
     private void setLoadMoreMode(RecyclerView recyclerView) {

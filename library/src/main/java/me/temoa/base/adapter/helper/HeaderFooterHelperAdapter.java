@@ -1,7 +1,9 @@
 package me.temoa.base.adapter.helper;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -91,15 +93,32 @@ public class HeaderFooterHelperAdapter extends RecyclerView.Adapter<BaseViewHold
     @Override
     public void onViewAttachedToWindow(@NonNull BaseViewHolder holder) {
         mInnerAdapter.onViewAttachedToWindow(holder);
-        LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_HEADER);
-        LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_FOOTER);
+        if (getItemViewType(holder.getLayoutPosition()) == Constants.VIEW_TYPE_HEADER
+                || getItemViewType(holder.getLayoutPosition()) == Constants.VIEW_TYPE_FOOTER) {
+            ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+            if (params != null && params instanceof StaggeredGridLayoutManager.LayoutParams)
+                ((StaggeredGridLayoutManager.LayoutParams) params).setFullSpan(true);
+        }
     }
 
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         mInnerAdapter.onAttachedToRecyclerView(recyclerView);
         final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        LayoutFullSpanUtils.fixGridLayoutFullSpanView(this, layoutManager, Constants.VIEW_TYPE_HEADER);
-        LayoutFullSpanUtils.fixGridLayoutFullSpanView(this, layoutManager, Constants.VIEW_TYPE_FOOTER);
+
+        if (layoutManager instanceof GridLayoutManager) {
+            GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
+            final int spanCount = gridLayoutManager.getSpanCount();
+            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    if (getItemViewType(position) == Constants.VIEW_TYPE_HEADER
+                            || getItemViewType(position) == Constants.VIEW_TYPE_FOOTER) {
+                        return spanCount;
+                    }
+                    return 1;
+                }
+            });
+        }
     }
 }

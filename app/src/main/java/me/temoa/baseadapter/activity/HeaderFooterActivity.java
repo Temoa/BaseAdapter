@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,9 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import me.temoa.base.adapter.helper.HeaderFooterHelperAdapter;
-import me.temoa.base.adapter.helper.LoadMoreHelperAdapter;
 import me.temoa.base.adapter.listener.OnItemClickListener;
-import me.temoa.base.adapter.listener.OnLoadMoreListener;
 import me.temoa.baseadapter.R;
 import me.temoa.baseadapter.adapter.SimpleStringAdapter;
 
@@ -32,7 +31,7 @@ public class HeaderFooterActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 

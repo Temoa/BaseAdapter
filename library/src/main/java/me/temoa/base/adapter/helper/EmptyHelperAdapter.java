@@ -2,6 +2,7 @@ package me.temoa.base.adapter.helper;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +93,11 @@ public class EmptyHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     public void onViewAttachedToWindow(@NonNull BaseViewHolder holder) {
         mInnerAdapter.onViewAttachedToWindow(holder);
         if (isEmpty()) {
-            LayoutFullSpanUtils.fixStaggeredGridLayoutFullSpanView(this, holder, Constants.VIEW_TYPE_EMPTY);
+            if (getItemViewType(holder.getLayoutPosition()) == Constants.VIEW_TYPE_EMPTY) {
+                ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+                if (params != null && params instanceof StaggeredGridLayoutManager.LayoutParams)
+                    ((StaggeredGridLayoutManager.LayoutParams) params).setFullSpan(true);
+            }
         }
     }
 }
