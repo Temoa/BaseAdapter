@@ -48,7 +48,7 @@ public class SimpleItemActivity extends BaseActivity {
                 Toast.makeText(SimpleItemActivity.this, item + " [long click]" + position, Toast.LENGTH_SHORT).show();
             }
         });
-        final EmptyHelperAdapter emptyHelperAdapter = new EmptyHelperAdapter(adapter);
+        final EmptyHelperAdapter<String> emptyHelperAdapter = new EmptyHelperAdapter<>(adapter);
         final LoadMoreHelperAdapter loadMoreHelperAdapter = new MyLoadMoreAdapter(emptyHelperAdapter);
 
         @SuppressLint("InflateParams")

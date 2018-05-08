@@ -23,8 +23,9 @@
         <activity android:name=".item_decoration.ItemDecorationActivity" />
         <activity android:name=".sticky.StickyActivity" />
         <activity android:name=".snap_helper.SnapHelperActivity" />
+        <activity android:name=".animation.RecyclerViewAnimationActivity" />
         <activity
-            android:name=".animation.RecyclerViewAnimationActivity"
+            android:name=".activity.TestActivity"
             android:exported="true" />
     </application>
 

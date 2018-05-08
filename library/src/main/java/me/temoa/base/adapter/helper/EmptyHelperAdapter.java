@@ -1,28 +1,28 @@
 package me.temoa.base.adapter.helper;
 
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import me.temoa.base.adapter.BaseAdapter;
 import me.temoa.base.adapter.BaseViewHolder;
 
 /**
  * Created by lai
  * on 2017/11/11.
- * 如果用网格布局的话，设置空布局无法全屏(可以通过瀑布布局曲线救国)
+ * 不支持网格布局
  */
 @SuppressWarnings("unused") // public api
-public class EmptyHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> {
+public class EmptyHelperAdapter<T> extends BaseHelperAdapter<T> {
 
     private int mEmptyViewLayoutId;
     private View mEmptyView;
 
     @NonNull
-    private final RecyclerView.Adapter mInnerAdapter;
+    private final BaseAdapter<T> mInnerAdapter;
 
     public void setEmptyView(int id) {
         mEmptyViewLayoutId = id;
@@ -36,7 +36,8 @@ public class EmptyHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         return mInnerAdapter.getItemCount() == 0;
     }
 
-    public EmptyHelperAdapter(@NonNull RecyclerView.Adapter mInnerAdapter) {
+    public EmptyHelperAdapter(@NonNull BaseAdapter<T> mInnerAdapter) {
+        super(mInnerAdapter);
         this.mInnerAdapter = mInnerAdapter;
     }
 
@@ -64,11 +65,10 @@ public class EmptyHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 return new BaseViewHolder(emptyView);
             }
         } else {
-            return (BaseViewHolder) mInnerAdapter.onCreateViewHolder(parent, viewType);
+            return mInnerAdapter.onCreateViewHolder(parent, viewType);
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         if (!isEmpty()) {
@@ -88,7 +88,6 @@ public class EmptyHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         else return mInnerAdapter.getItemViewType(position);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onViewAttachedToWindow(@NonNull BaseViewHolder holder) {
         mInnerAdapter.onViewAttachedToWindow(holder);

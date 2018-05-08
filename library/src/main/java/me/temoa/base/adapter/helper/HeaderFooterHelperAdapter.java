@@ -7,6 +7,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
+import me.temoa.base.adapter.BaseAdapter;
 import me.temoa.base.adapter.BaseViewHolder;
 
 /**
@@ -14,10 +15,10 @@ import me.temoa.base.adapter.BaseViewHolder;
  * on 2017/11/11.
  */
 @SuppressWarnings("unused") // public api
-public class HeaderFooterHelperAdapter extends RecyclerView.Adapter<BaseViewHolder> {
+public class HeaderFooterHelperAdapter<T> extends BaseHelperAdapter<T> {
 
     @NonNull
-    private final RecyclerView.Adapter mInnerAdapter;
+    private final BaseAdapter<T> mInnerAdapter;
 
     private View mHeaderView;
     private View mFooterView;
@@ -50,7 +51,8 @@ public class HeaderFooterHelperAdapter extends RecyclerView.Adapter<BaseViewHold
         return mFooterView == null ? 0 : 1;
     }
 
-    public HeaderFooterHelperAdapter(@NonNull RecyclerView.Adapter innerAdapter) {
+    public HeaderFooterHelperAdapter(@NonNull BaseAdapter<T> innerAdapter) {
+        super(innerAdapter);
         this.mInnerAdapter = innerAdapter;
     }
 
@@ -62,11 +64,10 @@ public class HeaderFooterHelperAdapter extends RecyclerView.Adapter<BaseViewHold
         } else if (mFooterView != null && viewType == Constants.VIEW_TYPE_FOOTER) {
             return new BaseViewHolder(mFooterView);
         } else {
-            return (BaseViewHolder) mInnerAdapter.onCreateViewHolder(parent, viewType);
+            return mInnerAdapter.onCreateViewHolder(parent, viewType);
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         if (getItemViewType(position) == Constants.VIEW_TYPE_HEADER) return;
@@ -89,7 +90,6 @@ public class HeaderFooterHelperAdapter extends RecyclerView.Adapter<BaseViewHold
             return mInnerAdapter.getItemViewType(position - getHeaderCount());
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onViewAttachedToWindow(@NonNull BaseViewHolder holder) {
         mInnerAdapter.onViewAttachedToWindow(holder);

@@ -11,8 +11,6 @@ import android.view.MenuItem;
 
 import me.temoa.baseadapter.R;
 import me.temoa.baseadapter.activity.BaseActivity;
-import me.temoa.baseadapter.item_touch_helper.SimpleItemTouchCallback;
-import me.temoa.baseadapter.item_touch_helper.TouchSimpleStringAdapter;
 
 /**
  * Created by lai

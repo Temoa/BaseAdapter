@@ -1,6 +1,7 @@
 package me.temoa.baseadapter.expand;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,17 +61,18 @@ public abstract class BaseExpandAdapter<T, V> extends RecyclerView.Adapter<BaseV
         }
     }
 
+    @NonNull
     @Override
-    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (mGroupLayoutId == 0 || mSubLayoutId == 0) {
             throw new RuntimeException("Please set up group item layout or sub item layout.");
         }
         View v;
-        BaseViewHolder viewHolder = null;
+        BaseViewHolder viewHolder;
         if (viewType == ItemStatus.VIEW_TYPE_GROUP) {
             v = mLayoutInflater.inflate(mGroupLayoutId, parent, false);
             viewHolder = new BaseViewHolder(v);
-        } else if (viewType == ItemStatus.VIEW_TYPE_SUB) {
+        } else {
             v = mLayoutInflater.inflate(mSubLayoutId, parent, false);
             viewHolder = new BaseViewHolder(v);
         }
@@ -78,7 +80,7 @@ public abstract class BaseExpandAdapter<T, V> extends RecyclerView.Adapter<BaseV
     }
 
     @Override
-    public void onBindViewHolder(final BaseViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final BaseViewHolder holder, int position) {
         final ItemStatus itemStatus = getItemStatusByPosition(position);
         final GroupItem<T, V> groupItem = mItems.get(itemStatus.getGroupItemIndex());
 

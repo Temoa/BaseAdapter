@@ -3,6 +3,7 @@ package me.temoa.baseadapter.animation;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -132,8 +133,9 @@ public class RecyclerViewAnimationActivity extends BaseActivity {
             return mLayoutManager;
         }
 
+        @NonNull
         @Override
-        public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             if (mLayoutManager instanceof GridLayoutManager) {
                 int width = Resources.getSystem().getDisplayMetrics().widthPixels;
                 View itemView = LayoutInflater.from(parent.getContext())
@@ -151,7 +153,7 @@ public class RecyclerViewAnimationActivity extends BaseActivity {
         }
 
         @Override
-        public void onBindViewHolder(BaseViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
 
         }
 

@@ -10,9 +10,8 @@ import java.util.Collections;
 import java.util.List;
 
 import me.temoa.base.adapter.BaseViewHolder;
-import me.temoa.baseadapter.adapter.SimpleStringAdapter;
-import me.temoa.baseadapter.item_touch_helper.ItemTouchHelperAdapter;
 import me.temoa.baseadapter.R;
+import me.temoa.baseadapter.adapter.SimpleStringAdapter;
 
 /**
  * Created by lai
@@ -21,7 +20,7 @@ import me.temoa.baseadapter.R;
 
 public class TouchSimpleStringAdapter extends SimpleStringAdapter implements ItemTouchHelperAdapter {
 
-    public TouchSimpleStringAdapter(Context context, List<String> items) {
+    TouchSimpleStringAdapter(Context context, List<String> items) {
         super(context, items);
     }
 

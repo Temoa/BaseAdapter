@@ -89,7 +89,7 @@ public class MultiItemActivity extends AppCompatActivity {
             return msg;
         }
 
-        public void setMsg(String msg) {
+        void setMsg(String msg) {
             this.msg = msg;
         }
 
@@ -97,7 +97,7 @@ public class MultiItemActivity extends AppCompatActivity {
             return hasImage;
         }
 
-        public void setHasImage(boolean hasImage) {
+        void setHasImage(boolean hasImage) {
             this.hasImage = hasImage;
         }
     }

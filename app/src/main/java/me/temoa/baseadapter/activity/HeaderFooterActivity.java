@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +23,7 @@ import me.temoa.baseadapter.adapter.SimpleStringAdapter;
 
 public class HeaderFooterActivity extends BaseActivity {
 
-    private HeaderFooterHelperAdapter mHeaderFooterHelperAdapter;
+    private HeaderFooterHelperAdapter<String> mHeaderFooterHelperAdapter;
     private View mHeaderFooterView;
 
     @Override
@@ -42,7 +41,7 @@ public class HeaderFooterActivity extends BaseActivity {
                 Toast.makeText(HeaderFooterActivity.this, item, Toast.LENGTH_SHORT).show();
             }
         });
-        mHeaderFooterHelperAdapter = new HeaderFooterHelperAdapter(adapter);
+        mHeaderFooterHelperAdapter = new HeaderFooterHelperAdapter<>(adapter);
         // 这里遇到一个坑
         // 这里给 Adapter 传入一个 View 用于创建 ViewHolder, 就无法传入 onCreateViewHolder() 的参数 parent
         // 如果item 的布局的根布局是除 RelativeLayout 之外的其他布局或者只有一个view，会导致无法居中的问题
