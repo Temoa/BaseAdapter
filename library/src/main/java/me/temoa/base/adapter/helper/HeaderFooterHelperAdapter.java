@@ -9,10 +9,14 @@ import android.view.ViewGroup;
 
 import me.temoa.base.adapter.BaseAdapter;
 import me.temoa.base.adapter.BaseViewHolder;
+import me.temoa.base.adapter.listener.HFOnItemClickListener;
+import me.temoa.base.adapter.listener.HFOnItemLongClickListener;
 
 /**
  * Created by lai
  * on 2017/11/11.
+ * <p>
+ * 仅支持一个头部和一个底部
  */
 @SuppressWarnings("unused") // public api
 public class HeaderFooterHelperAdapter<T> extends BaseHelperAdapter<T> {
@@ -22,6 +26,14 @@ public class HeaderFooterHelperAdapter<T> extends BaseHelperAdapter<T> {
 
     private View mHeaderView;
     private View mFooterView;
+
+    /*
+    为 HeaderFooterHelperAdapter 设置新的点击事件监听器
+    因为 InnerAdapter(BaseAdapter) 中的点击事件 position 获取的是 ViewHolder.getAdapterPosition
+    与 HeaderFooterHelperAdapter 中的 position 会相差 Header 个数的位置
+     */
+    private HFOnItemClickListener<T> mHFOnItemClickListener;
+    private HFOnItemLongClickListener<T> mHFOnItemLongClickListener;
 
     public void addHeader(View v) {
         mHeaderView = v;
@@ -51,6 +63,14 @@ public class HeaderFooterHelperAdapter<T> extends BaseHelperAdapter<T> {
         return mFooterView == null ? 0 : 1;
     }
 
+    public void setItemClickListener(HFOnItemClickListener<T> HFOnItemClickListener) {
+        mHFOnItemClickListener = HFOnItemClickListener;
+    }
+
+    public void setItemLongClickListener(HFOnItemLongClickListener<T> HFOnItemLongClickListener) {
+        mHFOnItemLongClickListener = HFOnItemLongClickListener;
+    }
+
     public HeaderFooterHelperAdapter(@NonNull BaseAdapter<T> innerAdapter) {
         super(innerAdapter);
         this.mInnerAdapter = innerAdapter;
@@ -69,7 +89,48 @@ public class HeaderFooterHelperAdapter<T> extends BaseHelperAdapter<T> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final BaseViewHolder holder, int position) {
+        if (mHFOnItemClickListener != null) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = holder.getAdapterPosition();
+                    int viewType = getItemViewType(position);
+                    if (viewType == Constants.VIEW_TYPE_HEADER
+                            || viewType == Constants.VIEW_TYPE_FOOTER) {
+                        mHFOnItemClickListener.onHeaderFooterItemClick(v, position, viewType);
+                    } else {
+                        int innerAdapterPosition = position - getHeaderCount(); // 在原始 Adapter 位置
+                        mHFOnItemClickListener.onNormalItemClick(
+                                v,
+                                mInnerAdapter.getData().get(innerAdapterPosition),
+                                position // 在 HeaderFooterHelperAdapter 位置
+                        );
+                    }
+                }
+            });
+        }
+        if (mHFOnItemLongClickListener != null) {
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int position = holder.getAdapterPosition();
+                    int viewType = getItemViewType(position);
+                    if (viewType == Constants.VIEW_TYPE_HEADER
+                            || viewType == Constants.VIEW_TYPE_FOOTER) {
+                        mHFOnItemLongClickListener.onHeaderFooterItemClick(v, position, viewType);
+                    } else {
+                        int innerAdapterPosition = position - getHeaderCount();
+                        mHFOnItemLongClickListener.onNormalItemClick(
+                                v,
+                                mInnerAdapter.getData().get(innerAdapterPosition),
+                                position
+                        );
+                    }
+                    return true;
+                }
+            });
+        }
         if (getItemViewType(position) == Constants.VIEW_TYPE_HEADER) return;
         if (getItemViewType(position) == Constants.VIEW_TYPE_FOOTER) return;
         mInnerAdapter.onBindViewHolder(holder, position - getHeaderCount());

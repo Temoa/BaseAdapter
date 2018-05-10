@@ -11,8 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import me.temoa.base.adapter.helper.Constants;
 import me.temoa.base.adapter.helper.HeaderFooterHelperAdapter;
-import me.temoa.base.adapter.listener.OnItemClickListener;
+import me.temoa.base.adapter.listener.HFOnItemClickListener;
+import me.temoa.base.adapter.listener.HFOnItemLongClickListener;
 import me.temoa.baseadapter.R;
 import me.temoa.baseadapter.adapter.SimpleStringAdapter;
 
@@ -35,20 +37,44 @@ public class HeaderFooterActivity extends BaseActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         SimpleStringAdapter adapter = new SimpleStringAdapter(this, getData());
-        adapter.setItemClickListener(new OnItemClickListener<String>() {
-            @Override
-            public void onClick(View itemView, String item, int position) {
-                Toast.makeText(HeaderFooterActivity.this, item, Toast.LENGTH_SHORT).show();
-            }
-        });
         mHeaderFooterHelperAdapter = new HeaderFooterHelperAdapter<>(adapter);
         // 这里遇到一个坑
-        // 这里给 Adapter 传入一个 View 用于创建 ViewHolder, 就无法传入 onCreateViewHolder() 的参数 parent
+        // 这里给 Adapter 传入一个 View 用于创建 ViewHolder
         // 如果item 的布局的根布局是除 RelativeLayout 之外的其他布局或者只有一个view，会导致无法居中的问题
         // 但是如果跟布局是 RelativeLayout 就不会出现这个问题
         mHeaderFooterView = LayoutInflater.from(this).inflate(R.layout.item_header_footer, null);
         mHeaderFooterHelperAdapter.addHeader(mHeaderFooterView);
         mHeaderFooterHelperAdapter.addFooter(mHeaderFooterView);
+        mHeaderFooterHelperAdapter.setItemClickListener(new HFOnItemClickListener<String>() {
+            @Override
+            public void onHeaderFooterItemClick(View v, int position, int viewType) {
+                Toast.makeText(
+                        HeaderFooterActivity.this,
+                        viewType == Constants.VIEW_TYPE_HEADER ? "Header" : "Footer",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+            @Override
+            public void onNormalItemClick(View v, String s, int position) {
+                Toast.makeText(HeaderFooterActivity.this, s, Toast.LENGTH_SHORT).show();
+            }
+        });
+        mHeaderFooterHelperAdapter.setItemLongClickListener(new HFOnItemLongClickListener<String>() {
+            @Override
+            public void onHeaderFooterItemClick(View v, int position, int viewType) {
+                Toast.makeText(
+                        HeaderFooterActivity.this,
+                        viewType == Constants.VIEW_TYPE_HEADER ? "Long Header" : "Long Footer",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+            @Override
+            public void onNormalItemClick(View v, String s, int position) {
+                Toast.makeText(HeaderFooterActivity.this, "Long " + s, Toast.LENGTH_SHORT).show();
+            }
+        });
         recyclerView.setAdapter(mHeaderFooterHelperAdapter);
     }
 
