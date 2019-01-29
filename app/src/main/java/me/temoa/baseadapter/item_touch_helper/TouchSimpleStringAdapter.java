@@ -33,8 +33,19 @@ public class TouchSimpleStringAdapter extends SimpleStringAdapter implements Ite
 
     @Override
     public void onItemMove(int from, int to) {
-        Collections.swap(mItems, from, to);
-        notifyItemMoved(from, to);
+        // Collections.swap(mItems, from, to);
+        // notifyItemMoved(from, to);
+        // ItemTouchHelper.Callback onMove 方法是实时调用的,item 的 position 也需要实时调用, 不是的话 position 会错乱
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(mList, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(mList, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
     }
 
     @Override
